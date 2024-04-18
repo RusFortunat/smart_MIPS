@@ -81,13 +81,14 @@ def update(particles, lattice, N, L, rotation_rate, translate_along_rate):
 
 def get_image(particles, lattice, N, L):
     # create a 
-    im = np.zeros(shape=(L,L, 3))
+    im = np.zeros(shape=(L,L, 3), np.uint8)
     for n in range(N):
         X = particles[n][0]
         Y = particles[n][1]
         angle = particles[n][2]
-        newX = X
-        newY = Y
+        newX = int(X)
+        newY = int(Y)
+        #print("newX = ", newX, "; newY = ", newY, "; angle = ", angle)
         if angle == 0: # jump to the right
             newX = X + 1 if X < L - 1 else 0
         elif angle == 1: # jump to the left
@@ -97,6 +98,7 @@ def get_image(particles, lattice, N, L):
         else: # jump to the bottom
             newY = Y - 1 if Y > 0 else L - 1
 
+        
         if lattice[newX][newY] != 0:
             im[X][Y][0] = 255 # represents red colour; 0 -- blue
         else:
@@ -116,37 +118,50 @@ if __name__ == '__main__':
 
     # simulation parameters
     runs = 1
-    sim_duration = 1000
-    L = 200
+    sim_duration = 500
+    L = 20
     density = 0.1
     rotation_rate = 0.1
     translate_along_rate = 0.4
     translate_opposite_rate = 0.5 - translate_along_rate
     translate_transverse = 0.25
     N = int(L*L*density)
-    
+    print("N = ", N)
+    print("parameters chosen")
+
     #for run in range(runs):
     #    print("run ", run)
         
     # initial conditions
-    particles = np.zeros(shape=(3,N)) # x,y position, angle, color code
+    #particles = np.zeros(shape=(N,3)) # x,y position, angle, color code
+    particles = []
     lattice = np.zeros(shape=(L, L))
     n = 0
     while n < N:
         X = random.randint(0, L-1)
         Y = random.randint(0, L-1)
-        if lattice[X][Y] != 0: 
-            particles[n][0] = X
-            particles[n][1] = Y
+        if lattice[X][Y] == 0: 
+            lattice[X][Y] = 1
+            #particles[n][0] = int(X)
+            #particles[n][1] = int(Y)
             angle = random.randint(0,3)
-            particles[n][2] = angle
+            #particles[n][2] = int(angle)
+            entry = [X,Y,angle]
+            particles.append(entry)
             n += 1
+    #print("particles positions and angles")
+    #print(particles)
+
+    print("initial conditions set")
 
     images = []
     image = get_image(particles, lattice, N, L)
-    images.add(image)
+    image = Image.fromarray(image)
+    images.append(image)
+    print("first image recorded")
 
     for t in range(sim_duration):
+        print("timestep ", t)
         for n in range(N):
             update(particles, lattice, N, L, rotation_rate, translate_along_rate)
 
@@ -154,7 +169,7 @@ if __name__ == '__main__':
         if t % 10 == 0:
             image = get_image(particles, lattice, N, L)
             image = Image.fromarray(image)
-            images.add(image)
+            images.append(image)
 
     # animation
     images[0].save('Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/output.gif',
