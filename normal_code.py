@@ -7,7 +7,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-def update(particles, lattice, N, L, rotation_rate, translate_along_rate):
+def update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate):
     # pick random particle
     picked_particle = random.randint(0,N-1) 
     X = particles[picked_particle][0]
@@ -18,7 +18,7 @@ def update(particles, lattice, N, L, rotation_rate, translate_along_rate):
     rotate_or_translate = random.randint(0,1)
     # rotate
     if rotate_or_translate == 0: 
-        dice = random.random(0,1)
+        dice = random.random()
         if dice < rotation_rate:
             angle = particles[picked_particle][2]
             left_or_right = random.randint(0,1)
@@ -33,7 +33,7 @@ def update(particles, lattice, N, L, rotation_rate, translate_along_rate):
         newX = X
         newY = Y
         angle = particles[picked_particle][2]
-        dice = random.random(0,1)
+        dice = random.random()
         # could be a smarter way to encode all what is below
         if dice < translate_along_rate: # jump along the director
             if angle == 0: # jump to the right
@@ -44,7 +44,7 @@ def update(particles, lattice, N, L, rotation_rate, translate_along_rate):
                 newY = Y + 1 if Y < L - 1 else 0
             else: # jump to the bottom
                 newY = Y - 1 if Y > 0 else L - 1
-        elif dice < 0.5:                # jump against the director
+        elif dice > translate_along_rate and dice < translate_along_rate + translate_opposite_rate: # jump against the director
             if angle == 0: # jump to the right
                 newX = X - 1 if X > 0 else L - 1
             elif angle == 1: # jump to the left
@@ -53,7 +53,7 @@ def update(particles, lattice, N, L, rotation_rate, translate_along_rate):
                 newY = Y - 1 if Y > 0 else L - 1
             else: # jump to the bottom
                 newY = Y + 1 if Y < L - 1 else 0
-        elif dice < 0.75:               # jump to the left of the director
+        elif dice > translate_along_rate + translate_opposite_rate and dice < translate_along_rate + translate_opposite_rate + rotation_rate:               # jump to the left of the director
             if angle == 0: # jump to the right
                 newY = Y + 1 if Y < L - 1 else 0
             elif angle == 1: # jump to the left
@@ -81,7 +81,7 @@ def update(particles, lattice, N, L, rotation_rate, translate_along_rate):
 
 def get_image(particles, lattice, N, L):
     # create a 
-    im = np.zeros(shape=(L,L, 3), np.uint8)
+    im = np.zeros(shape=(L,L, 3))
     for n in range(N):
         X = particles[n][0]
         Y = particles[n][1]
@@ -107,9 +107,9 @@ def get_image(particles, lattice, N, L):
     for x in range(L):
         for y in range(L):
             if lattice[x][y] == 0:
-                im[x][y][0] == 255
-                im[x][y][1] == 255
-                im[x][y][2] == 255
+                im[x][y][0] = 255
+                im[x][y][1] = 255
+                im[x][y][2] = 255
     
     return im
 
@@ -118,13 +118,13 @@ if __name__ == '__main__':
 
     # simulation parameters
     runs = 1
-    sim_duration = 500
-    L = 20
-    density = 0.1
+    sim_duration = 10000
+    L = 200
+    density = 0.4
     rotation_rate = 0.1
-    translate_along_rate = 0.4
-    translate_opposite_rate = 0.5 - translate_along_rate
-    translate_transverse = 0.25
+    translate_along_rate = 0.85
+    translate_opposite_rate = 0.05
+    translate_transverse = 0.05
     N = int(L*L*density)
     print("N = ", N)
     print("parameters chosen")
@@ -149,30 +149,46 @@ if __name__ == '__main__':
             entry = [X,Y,angle]
             particles.append(entry)
             n += 1
-    #print("particles positions and angles")
-    #print(particles)
+    # check if the number of particles in the list is equal to number of particles in the system
+    sum_particles = 0
+    for x in range(L):
+        for y in range(L):
+            if lattice[x][y] == 1:
+                sum_particles += 1
+    if sum_particles != N:
+        print("Error! Number of particles in the list does not fit the number of particles in the system!")
 
     print("initial conditions set")
 
     images = []
     image = get_image(particles, lattice, N, L)
-    image = Image.fromarray(image)
+    image = Image.fromarray(np.uint8(image))
     images.append(image)
     print("first image recorded")
 
     for t in range(sim_duration):
         print("timestep ", t)
         for n in range(N):
-            update(particles, lattice, N, L, rotation_rate, translate_along_rate)
+            update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate)
 
         # collect system colored snapshot every 10 MCS
         if t % 10 == 0:
             image = get_image(particles, lattice, N, L)
-            image = Image.fromarray(image)
+            image = Image.fromarray(np.uint8(image))
             images.append(image)
 
+    # check if the number of particles haven't changed
+    sum_particles = 0
+    for x in range(L):
+        for y in range(L):
+            if lattice[x][y] == 1:
+                sum_particles += 1
+    if sum_particles != N:
+        print("Number of particles changed!")
+
     # animation
-    images[0].save('Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/output.gif',
+    filename = "./density_" + str(density) + "_L_" + str(L) + "_duration_" + str(sim_duration) + "_p_" + str(translate_along_rate) + "_rot_" + str(rotation_rate) + ".gif"
+    images[0].save(filename,
                save_all=True, append_images=images[1:], optimize=False, duration=40, loop=0)
 
 
