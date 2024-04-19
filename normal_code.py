@@ -1,4 +1,5 @@
-# 1d coalescence with DQN
+# MIPS on 2d lattice; the model is taken from: 
+# https://pubs.aip.org/aip/jcp/article/148/15/154902/195348/Phase-separation-and-large-deviations-of-lattice
 import math
 import numpy as np
 import random

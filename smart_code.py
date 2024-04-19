@@ -1,4 +1,12 @@
-# 1d coalescence with DQN
+# smart modification of on-lattice 2d MIPS model that is taken from: 
+# https://pubs.aip.org/aip/jcp/article/148/15/154902/195348/Phase-separation-and-large-deviations-of-lattice
+
+# In this smart version of the code, i will try controlling the size of forming droplets using reinforcement
+# learning. Specifically, i will be feeding the network the system parameters and fraction of blocked particlees, 
+# and on the output i would ask it to tell whether the Peclet number needs to be increased or decreased.
+# input state: density, Pe number, fraction of blocked particles, ...? 
+# output: +\delta forward_jump_rate, -\delta forward_jump_rate
+
 import math
 import numpy as np
 import random
@@ -9,6 +17,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch.distributions import Categorical
 from collections import namedtuple, deque
+from PIL import Image
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -46,26 +55,20 @@ class DQN(nn.Module):
         x = F.relu(self.layer1(x))
         return self.layer2(x)    
 
-# we center the state around the chocen particle
-# for training phase newL = L; L is a size of observation vector
-def get_state(system, X, Y, L, newL):
-    prevX = X - 1 if X > 0 else newL - 1
-    nextX = X + 1 if X < newL - 1 else 0
-    prevY = Y - 1 if Y > 0 else newL - 1
-    nextY = Y + 1 if Y < newL - 1 else 0
-    state = np.zeros(4) # just right, left, top, bottom
-    top_value = system[X][nextY]
-    bottom_value = system[X][prevY]
-    left_value = system[prevX][Y]
-    right_value = system[nextX][Y]
-    state[0] = right_value
-    state[1] = left_value
-    state[2] = top_value
-    state[3] = bottom_value
+def count_blocked_particles(lattice, L):
+    sum = 0
+    for X in range(L):
+        for Y in range(L):
+            nextX = X + 1 if X < L - 1 else 0
+            prevX = X - 1 if X > 0 else L - 1
+            nextY = Y + 1 if Y < L - 1 else 0
+            prevY = Y - 1 if Y > 0 else L - 1
+            if lattice[nextX][Y] == 1 and lattice[prevX][Y] == 1 and lattice[X][nextY] == 1 and lattice[X][prevY] == 1:
+                sum += 1 # blocked
 
-    return state
+    return sum
 
-def select_action_training(state): 
+def select_action_training(state, n_actions): 
     global steps_done # count total number of steps to go from almost random exploration to more efficient actions
     sample = random.random()
     eps_threshold = EPS_END + (EPS_START - EPS_END) * math.exp(-1. * steps_done / EPS_DECAY)
@@ -79,7 +82,7 @@ def select_action_training(state):
                 #return actor_prey(state).max(1)[1].view(1, 1) # view(1,1) changes shape to [[action], dtype]
     else:
         # select a random action; 
-        rand_aciton = random.randint(0,3) # left, right, top, bottom
+        rand_aciton = random.randint(0, n_actions-1) # left, right, top, bottom
         return torch.tensor([[rand_aciton]], device=device, dtype=torch.long)
 
 def select_action_post_training(state, T): 
@@ -107,59 +110,77 @@ def select_action_post_training(state, T):
         
         return action
 
+def update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse):
+    # pick random particle
+    picked_particle = random.randint(0,N-1) 
+    X = particles[picked_particle][0]
+    Y = particles[picked_particle][1]
+    angle = particles[picked_particle][2]
+    #if lattice[X][Y] == 0:
+    #    print("Error! Lattice site is empty!")
 
-def step(lattice, X, Y, L, action):
-    # move
-    prevX = X - 1 if X > 0 else L - 1
-    nextX = X + 1 if X < L - 1 else 0
-    prevY = Y - 1 if Y > 0 else L - 1
-    nextY = Y + 1 if Y < L - 1 else 0
-    
-    reward = 1
-    next_state = []
-    lattice[X][Y] = 0 # particle leaves the original lattice site
-    if action == 0: # jump to the right
-        if lattice[nextX][Y] == 0 and (lattice[prevX][Y] == 1 or lattice[X][prevY] == 1 or lattice[X][nextY] == 1):
-            reward = -10 # you did the wrong thing buddy
-            lattice[nextX][Y] = 1
-        elif lattice[nextX][Y] == 1:
-            reward = 10
-        else:
-            lattice[nextX][Y] = 1
-        
-        next_state = get_state(lattice, nextX, Y, L, L)
-    elif action == 1: # jump to the left
-        if lattice[prevX][Y] == 0 and (lattice[nextX][Y] == 1 or lattice[X][prevY] == 1 or lattice[X][nextY] == 1):
-            reward = -10 # you did the wrong thing buddy
-            lattice[prevX][Y] = 1
-        elif lattice[prevX][Y] == 1:
-            reward = 10
-        else:
-            lattice[prevX][Y] = 1
-        
-        next_state = get_state(lattice, prevX, Y, L, L)
-    elif action == 2: # jump to the top
-        if lattice[X][nextY] == 0 and (lattice[X][prevY] == 1 or lattice[nextX][Y] == 1 or lattice[prevX][Y] == 1):
-            reward = -10 # you did the wrong thing buddy
-            lattice[X][nextY] = 1
-        elif lattice[X][nextY] == 1:
-            reward = 10
-        else:
-            lattice[X][nextY] = 1
-        
-        next_state = get_state(lattice, X, nextY, L, L)
-    else: # jump to the bottom
-        if lattice[X][prevY] == 0 and (lattice[X][nextY] == 1 or lattice[nextX][Y] == 1 or lattice[prevX][Y] == 1):
-            reward = -10 # you did the wrong thing buddy
-            lattice[X][prevY] = 1
-        elif lattice[X][prevY] == 1:
-            reward = 10
-        else:
-            lattice[X][prevY] = 1
-        
-        next_state = get_state(lattice, X, prevY, L, L)
+    # COUNTERCLOCKWISE ANGLE DIRECTION STARTING FROM +X DIRECTION
+    # 0 -- +X, 1 -- +Y, 2 -- -X, 3 -- -Y
 
-    return reward, next_state
+    dice = random.random()
+    # rotate
+    if dice < 2*rotation_rate: 
+        counter_or_clock_rotation = random.randint(0,1)
+        new_angle = 0
+        if counter_or_clock_rotation == 0: # +pi/2
+            new_angle = angle + 1 if angle != 3 else 0
+        else: # -pi/2
+            new_angle = angle - 1 if angle != 0 else 3
+        particles[picked_particle][2] = new_angle
+    # translate
+    else: 
+        newX = X
+        newY = Y
+        # could be a smarter way to encode all what is below
+        if dice < translate_along_rate + 2*rotation_rate: # jump along the director
+            if angle == 0: # jump to the right, +X
+                newX = X + 1 if X < L - 1 else 0
+            elif angle == 1: # jump to the top, +Y
+                newY = Y + 1 if Y < L - 1 else 0
+            elif angle == 2: # jump to the left, -X
+                newX = X - 1 if X > 0 else L - 1
+            else: # jump to the bottom, -Y
+                newY = Y - 1 if Y > 0 else L - 1
+        else:
+            if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate: # jump against the director
+                if angle == 0: # jump to the right, +X --> to the left, -X
+                    newX = X - 1 if X > 0 else L - 1
+                elif angle == 1: # jump to the top, +Y --> to the bottom, -Y
+                    newY = Y - 1 if Y > 0 else L - 1
+                elif angle == 2: # jump to the left, -X --> to the right, +X
+                    newX = X + 1 if X < L - 1 else 0
+                else: # jump to the bottom, -Y --> to the top, +Y
+                    newY = Y + 1 if Y < L - 1 else 0
+            else:
+                if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate + translate_transverse: # jump to +pi/2 from the director
+                    if angle == 0: # jump to the right, +X --> to the top, +Y
+                        newY = Y + 1 if Y < L - 1 else 0
+                    elif angle == 1: # jump to the top, +Y --> to the left, -X
+                        newX = X - 1 if X > 0 else L - 1
+                    elif angle == 2: # jump to the left, -X --> to the bottom, -Y
+                        newY = Y - 1 if Y > 0 else L - 1
+                    else: # jump to the bottom, -Y --> to the right, +X
+                        newX = X + 1 if X < L - 1 else 0
+                else:  # jump to -pi/2 from the director
+                    if angle == 0: # jump to the right, +X --> to the bottom, -Y
+                        newY = Y - 1 if Y > 0 else L - 1
+                    elif angle == 1: # jump to the top, +Y --> to the right, +X
+                        newX = X + 1 if X < L - 1 else 0
+                    elif angle == 2: # jump to the left, -X --> to the top, +Y
+                        newY = Y + 1 if Y < L - 1 else 0
+                    else: # jump to the bottom, -Y --> to the left, -X
+                        newX = X - 1 if X > 0 else L - 1
+        
+        if lattice[newX][newY] == 0:
+            lattice[X][Y] = 0 # particle leaves the original lattice site
+            lattice[newX][newY] = 1 # diffusion
+            particles[picked_particle][0] = newX
+            particles[picked_particle][1] = newY
 
 def optimize_model():
     if len(memory) < BATCH_SIZE: # execute 'optimize_model' only if #BATCH_SIZE number of updates have happened 
@@ -200,93 +221,84 @@ def optimize_model():
     optimizer.step()
 
 
-def do_training(num_episodes, L, Nt):
+def do_training(num_episodes, L, sim_duration):
+    # we choose different parameters every episode
     for i_episode in range(num_episodes):
+        # initial parameters
+        density = random.uniform(0, 0.5)
+        N = int(L*L*density)
+        starting_translate_along_rate = random.uniform(0, 0.95)
+        # to set the other rates, i will use the original model reference that i mention at the top
+        alpha = 0.035 / 0.0071 # took form paper; alpha = translate_transverse / rotation_rate, with rotation_rate=0.1, translate_transverse=1, translate_along_rate=25
+        starting_rotation_rate = (1 - starting_translate_along_rate) / (3*alpha + 2)
+        starting_translate_transverse = alpha * starting_rotation_rate
+        starting_translate_opposite_rate = starting_translate_transverse
+
+        translate_along_rate = starting_translate_along_rate
+        rotation_rate = starting_rotation_rate
+        translate_transverse = starting_translate_transverse
+        translate_opposite_rate = starting_translate_opposite_rate
         
-        # start with fully filled lattice
-        lattice = np.ones(shape=(L,L))
-        #lattice = np.random.randint(2,size=(L,L))
+        # initial conditions
+        particles = []
+        lattice = np.zeros(shape=(L, L))
+        n = 0
+        while n < N:
+            X = random.randint(0, L-1)
+            Y = random.randint(0, L-1)
+            if lattice[X][Y] == 0: 
+                lattice[X][Y] = 1
+                angle = random.randint(0,3)
+                entry = [X,Y,angle] 
+                particles.append(entry)
+                n += 1
 
         # main update loop; I use Monte Carlo random sequential updates here
         score = 0
-        episode_end_time = 0
-        for t in range(Nt):
-            episode_end_time = t
-            # pick random lattice site
-            for i in range(L*L):
-                X = random.randint(0, L-1)
-                Y = random.randint(0, L-1)
-                if lattice[X][Y] != 0:
-                    state = get_state(lattice, X, Y, L, L) # since the observation state equals to the lattice size
-                    #print("state before ", state)
-                    state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
-                    action = select_action_training(state) # select action
-                    #print("action ", action.item())
-                    reward, next_state = step(lattice, X, Y, L, action.item()) # update particle's position and do stochastic part
-                    #print("reward ", reward)
-                    reward = torch.tensor([reward], device=device)
-                    #print("state after ", next_state)
-                    next_state = torch.tensor(next_state, dtype=torch.float32, device=device).unsqueeze(0) 
-                    memory.push(state, action, next_state, reward)           
-                    score += reward
+        for t in range(sim_duration):
+            for n in range(N):
+                update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
 
-            optimize_model() # optimize both predators and prey networks
-            # Soft update of the target network's weights: θ′ ← τ θ + (1 −τ)θ′
-            target_net_state_dict = target_net.state_dict()
-            policy_net_state_dict = policy_net.state_dict()
-            for key in policy_net_state_dict:
-                target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
-            target_net.load_state_dict(target_net_state_dict)
-            
-            # no particles left
-            n_sum = 0
-            for x in range(L):
-                for y in range(L):
-                    if lattice[x][y] == 1:
-                        n_sum +=1
-            if n_sum == 1: # one of the species hit the absorbing state
-                break
+            # we start adjusting system parameters after initial transient behavior 
+            if t > 1000:
 
-        #print("Training episode ", i_episode, " is over. Survived particles ", L*L - sum_perished, "; episode ended after ", episode_end_time, " steps")
+                blocked_fraction = count_blocked_particles(lattice, L) / N
+
+                state = [density, translate_along_rate, blocked_fraction] # not sure if we need to pass anything else
+                #print("state before ", state)
+                state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
+                action = select_action_training(state) # increment
+                translate_along_rate += action
+                rotation_rate = (1 - translate_along_rate) / (3*alpha + 2)
+                translate_transverse = alpha * rotation_rate
+                translate_opposite_rate = translate_transverse
+
+                #print("action ", action.item())
+                reward = - abs(blocked_fraction - target_fraction)
+                next_state = [density, translate_along_rate, blocked_fraction] # update particle's position and do stochastic part
+                #print("reward ", reward)
+                reward = torch.tensor([reward], device=device)
+                #print("state after ", next_state)
+                next_state = torch.tensor(next_state, dtype=torch.float32, device=device).unsqueeze(0) 
+                memory.push(state, action, next_state, reward)           
+                score += reward
+
+                optimize_model() # optimize both predators and prey networks
+                # Soft update of the target network's weights: θ′ ← τ θ + (1 −τ)θ′
+                target_net_state_dict = target_net.state_dict()
+                policy_net_state_dict = policy_net.state_dict()
+                for key in policy_net_state_dict:
+                    target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
+                target_net.load_state_dict(target_net_state_dict)
+
         rewards.append(score) 
-        episode_durations.append(episode_end_time)
         plot_score()
 
     torch.save(target_net.state_dict(), PATH)
     plot_score(show_result=True)
     plt.ioff()
     #plt.show()
-    plt.savefig("./Training_encourage_merging.png", format="png", dpi=600)
-
-# check training efficiency
-def count_mistakes(net):
-    mistakes = 0
-    for i in range(n_observations + 1):
-        grid = [np.bincount(xs, minlength=n_observations) for xs in itertools.combinations(range(n_observations), i)]
-        # feed states to the network and check the resulting Q values
-        for j in range(len(grid)):
-            state = torch.tensor(grid[j], dtype=torch.float32, device=device).unsqueeze(0)
-            Q_values = net(state)
-            print("state ", state)
-            print("Q_values ", Q_values)
-            count_zeros = 0
-            count_ones = 0
-            sumQ_zeros = 0
-            sumQ_ones = 0
-            for n in range(n_observations):
-                if grid[j][n] == 0:
-                    count_zeros += 1
-                    sumQ_zeros += Q_values[0][n]
-                else:
-                    count_ones += 1
-                    sumQ_ones += Q_values[0][n]
-            if count_zeros != 0 and count_ones != 0:
-                sumQ_zeros /= count_zeros
-                sumQ_ones /= count_ones
-                if sumQ_ones < sumQ_zeros:
-                    mistakes += 1
-
-    return mistakes
+    plt.savefig("./Training.png", format="png", dpi=600)
 
 # plots
 def plot_score(show_result=False):
@@ -324,7 +336,7 @@ def plot_score(show_result=False):
 if __name__ == '__main__':
     Jesse_we_need_to_train_NN = True
     ############# Model parameters for Machine Learning #############
-    num_episodes = 500      # number of training episodes
+    num_episodes = 100      # number of training episodes
     BATCH_SIZE = 200        # the number of transitions sampled from the replay buffer
     GAMMA = 0.99            # the discounting factor
     EPS_START = 0.9         # EPS_START is the starting value of epsilon; determines how random our action choises are at the beginning
@@ -333,113 +345,40 @@ if __name__ == '__main__':
     TAU = 0.005             # TAU is the update rate of the target network
     LR = 1e-3               # LR is the learning rate of the AdamW optimizer
     ############# Lattice simulation parameters #############
-    L = 5                  # Lx, we start with fully occupied lattice
-    Nt = 100                # episode duration
-    n_observations = 4      # just give network a difference between positive and negative spins
-    n_actions = 4           # the particle can jump on any neighboring lattice sites, or stay put and eat
+    sim_duration = 5000
+    target_fraction = 0.1
+    L = 100
+    n_observations = 3      # just give network a difference between positive and negative spins
+    n_actions = 2           # the particle can jump on any neighboring lattice sites, or stay put and eat
     hidden_size = 32        # hidden size of the network
-    PATH = "./2d_encourage_L" + str(L) + "_NN_params.txt"
+    PATH = "./NN_params.txt"
 
     ############# Do the training if needed ##############
     if Jesse_we_need_to_train_NN:
         policy_net = DQN(n_observations, hidden_size, n_actions).to(device)
         target_net = DQN(n_observations, hidden_size, n_actions).to(device)
-        mistakes = count_mistakes(policy_net)
-        print("Number of mistakes before training: ", mistakes)
         target_net.load_state_dict(policy_net.state_dict())
         optimizer = optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
-        memory = ReplayMemory(100*Nt) # the overall memory batch size 
+        memory = ReplayMemory(100*sim_duration) # the overall memory batch size 
         #memory_prey = ReplayMemory(Nt) # the overall memory batch size 
         rewards = []
         episode_durations = []
         steps_done = 0 
-        do_training(num_episodes, L, Nt) 
+        do_training(num_episodes, L, sim_duration, target_fraction) 
 
     ############# Training summary ######################
     trained_net = DQN(n_observations, hidden_size, n_actions).to(device)
     trained_net.load_state_dict(torch.load(PATH))
-    print("Training results")
-    mistakes = count_mistakes(trained_net)
-    print("Number of mistakes after training: ", mistakes, "\n")
 
     ############# Post-training simulation ##############
-    runs = 10
-    newL = 100
-    Nt = 1000
-    T = 0.1
-    particles_left = np.zeros(Nt)
-    for run in range(runs):
-        print("run ", run)
-        big_lattice = np.ones(shape=(newL,newL))
-        perished = 0
-        for t in range(Nt):
-            for i in range(newL*newL):
-                # pick random lattice site
-                X = random.randint(0, newL-1)
-                Y = random.randint(0, newL-1)
-                if big_lattice[X][Y] != 0:
-                    state = get_state(big_lattice, X, Y, L, newL)
-                    state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
-                    action = select_action_post_training(state, T)
-                    
-                    newX = X
-                    newY = Y
-                    #prevX = X - 1 if X > 0 else newL - 1
-                    #nextX = X + 1 if X < newL - 1 else 0
-                    #prevY = Y - 1 if Y > 0 else newL - 1
-                    #nextY = Y + 1 if Y < newL - 1 else 0
-                    #other_values = []
-                    if action == 0: # jump to the right
-                        newX = X + 1 if X < newL - 1 else 0
-                        #newX = nextX
-                        #other_values.append(big_lattice[prevX][Y])
-                        #other_values.append(big_lattice[X][prevY])
-                        #other_values.append(big_lattice[X][nextY])
-                    elif action == 1: # jump to the left
-                        newX = X - 1 if X > 0 else newL - 1
-                        #newX = prevX
-                        #other_values.append(big_lattice[nextX][Y])
-                        #other_values.append(big_lattice[X][prevY])
-                        #other_values.append(big_lattice[X][nextY])
-                    elif action == 2: # jump to the top
-                        newY = Y + 1 if Y < newL - 1 else 0
-                        #newY = nextY
-                        #other_values.append(big_lattice[X][prevY])
-                        #other_values.append(big_lattice[nextX][Y])
-                        #other_values.append(big_lattice[prevX][Y])
-                    else: # jump to the bottom
-                        newY = Y - 1 if Y > 0 else newL - 1
-                        #newY = prevY
-                        #other_values.append(big_lattice[X][nextY])
-                        #other_values.append(big_lattice[nextX][Y])
-                        #other_values.append(big_lattice[prevX][Y])
-                    
-                    big_lattice[X][Y] = 0 # particle leaves the original lattice site
-                    if big_lattice[newX][newY] == 1:
-                        perished += 1 # coalescence
-                    #elif big_lattice[newX][newY] == 0 and (other_values[0] == 1 or other_values[1] == 1 or other_values[2] == 1):
-                    #    print("Man, you fucked up somewhere")
-                    #    big_lattice[newX][newY] = 1 # diffusion
-                    else:
-                        big_lattice[newX][newY] = 1 # diffusion
 
-            # count particles
-            #n_sum = 0
-            #for x in range(newL):
-            #    if big_lattice[x] == 1:
-            #        n_sum +=1
-            
-            particles_left[t] += (newL*newL - perished) / (newL*newL*runs) # look at how density decreases with time      
-            
-            # stop the run if only one particle left
-            if newL*newL - perished < 0.001*newL*newL: # if density becomes too low -- stop the simulation
-                break
+    
 
-    filename = "2d_encourage_data_L" + str(L) + "_bigL" + str(newL) + "_runs" + str(runs) + ".txt"
-    with open(filename, 'w') as f:
-        for t in range(Nt):
-            output_string = str(t) + "\t" + str(particles_left[t]) + "\n"
-            f.write(output_string)
+    #filename = "2d_encourage_data_L" + str(L) + "_bigL" + str(newL) + "_runs" + str(runs) + ".txt"
+    #with open(filename, 'w') as f:
+    #    for t in range(Nt):
+    #        output_string = str(t) + "\t" + str(particles_left[t]) + "\n"
+    #        f.write(output_string)
 
     # animation
     '''
