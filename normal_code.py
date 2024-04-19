@@ -7,74 +7,75 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-def update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate):
+def update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse):
     # pick random particle
     picked_particle = random.randint(0,N-1) 
     X = particles[picked_particle][0]
     Y = particles[picked_particle][1]
-    if lattice[X][Y] == 0:
-        print("Error! Lattice site is empty!")
+    angle = particles[picked_particle][2]
+    #if lattice[X][Y] == 0:
+    #    print("Error! Lattice site is empty!")
 
-    rotate_or_translate = random.randint(0,1)
+    # COUNTERCLOCKWISE ANGLE DIRECTION STARTING FROM +X DIRECTION
+    # 0 -- +X, 1 -- +Y, 2 -- -X, 3 -- -Y
+
+    dice = random.random()
     # rotate
-    if rotate_or_translate == 0: 
-        dice = random.random()
-        if dice < rotation_rate:
-            angle = particles[picked_particle][2]
-            left_or_right = random.randint(0,1)
-            if left_or_right == 0: # left
-                new_angle = angle - 1 if angle != 0 else 3
-            else:
-                new_angle = angle + 1 if angle != 3 else 0
-            particles[picked_particle][2] = new_angle
-
+    if dice < 2*rotation_rate: 
+        counter_or_clock_rotation = random.randint(0,1)
+        new_angle = 0
+        if counter_or_clock_rotation == 0: # +pi/2
+            new_angle = angle + 1 if angle != 3 else 0
+        else: # -pi/2
+            new_angle = angle - 1 if angle != 0 else 3
+        particles[picked_particle][2] = new_angle
     # translate
     else: 
         newX = X
         newY = Y
-        angle = particles[picked_particle][2]
-        dice = random.random()
         # could be a smarter way to encode all what is below
-        if dice < translate_along_rate: # jump along the director
-            if angle == 0: # jump to the right
+        if dice < translate_along_rate + 2*rotation_rate: # jump along the director
+            if angle == 0: # jump to the right, +X
                 newX = X + 1 if X < L - 1 else 0
-            elif angle == 1: # jump to the left
-                newX = X - 1 if X > 0 else L - 1
-            elif angle == 2: # jump to the top
+            elif angle == 1: # jump to the top, +Y
                 newY = Y + 1 if Y < L - 1 else 0
-            else: # jump to the bottom
-                newY = Y - 1 if Y > 0 else L - 1
-        elif dice > translate_along_rate and dice < translate_along_rate + translate_opposite_rate: # jump against the director
-            if angle == 0: # jump to the right
+            elif angle == 2: # jump to the left, -X
                 newX = X - 1 if X > 0 else L - 1
-            elif angle == 1: # jump to the left
-                newX = X + 1 if X < L - 1 else 0
-            elif angle == 2: # jump to the top
+            else: # jump to the bottom, -Y
                 newY = Y - 1 if Y > 0 else L - 1
-            else: # jump to the bottom
-                newY = Y + 1 if Y < L - 1 else 0
-        elif dice > translate_along_rate + translate_opposite_rate and dice < translate_along_rate + translate_opposite_rate + rotation_rate:               # jump to the left of the director
-            if angle == 0: # jump to the right
-                newY = Y + 1 if Y < L - 1 else 0
-            elif angle == 1: # jump to the left
-                newY = Y - 1 if Y > 0 else L - 1
-            elif angle == 2: # jump to the top
-                newX = X - 1 if X > 0 else L - 1
-            else: # jump to the bottom
-                newX = X + 1 if X < L - 1 else 0
-        else:                           # jump to the right of the director
-            if angle == 0: # jump to the right
-                newY = Y - 1 if Y > 0 else L - 1
-            elif angle == 1: # jump to the left
-                newY = Y + 1 if Y < L - 1 else 0
-            elif angle == 2: # jump to the top
-                newX = X + 1 if X < L - 1 else 0
-            else: # jump to the bottom
-                newX = X - 1 if X > 0 else L - 1
+        else:
+            if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate: # jump against the director
+                if angle == 0: # jump to the right, +X --> to the left, -X
+                    newX = X - 1 if X > 0 else L - 1
+                elif angle == 1: # jump to the top, +Y --> to the bottom, -Y
+                    newY = Y - 1 if Y > 0 else L - 1
+                elif angle == 2: # jump to the left, -X --> to the right, +X
+                    newX = X + 1 if X < L - 1 else 0
+                else: # jump to the bottom, -Y --> to the top, +Y
+                    newY = Y + 1 if Y < L - 1 else 0
+            else:
+                if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate + translate_transverse: # jump to +pi/2 from the director
+                    if angle == 0: # jump to the right, +X --> to the top, +Y
+                        newY = Y + 1 if Y < L - 1 else 0
+                    elif angle == 1: # jump to the top, +Y --> to the left, -X
+                        newX = X - 1 if X > 0 else L - 1
+                    elif angle == 2: # jump to the left, -X --> to the bottom, -Y
+                        newY = Y - 1 if Y > 0 else L - 1
+                    else: # jump to the bottom, -Y --> to the right, +X
+                        newX = X + 1 if X < L - 1 else 0
+                else:  # jump to -pi/2 from the director
+                    if angle == 0: # jump to the right, +X --> to the bottom, -Y
+                        newY = Y - 1 if Y > 0 else L - 1
+                    elif angle == 1: # jump to the top, +Y --> to the right, +X
+                        newX = X + 1 if X < L - 1 else 0
+                    elif angle == 2: # jump to the left, -X --> to the top, +Y
+                        newY = Y + 1 if Y < L - 1 else 0
+                    else: # jump to the bottom, -Y --> to the left, -X
+                        newX = X - 1 if X > 0 else L - 1
         
         if lattice[newX][newY] == 0:
             lattice[X][Y] = 0 # particle leaves the original lattice site
-            lattice[newX][newY] = 1 # diffusion; otherwise coalescence
+            lattice[newX][newY] = 1 # diffusion
             particles[picked_particle][0] = newX
             particles[picked_particle][1] = newY
 
@@ -92,9 +93,9 @@ def get_image(particles, lattice, N, L):
         if angle == 0: # jump to the right
             newX = X + 1 if X < L - 1 else 0
         elif angle == 1: # jump to the left
-            newX = X - 1 if X > 0 else L - 1
-        elif angle == 2: # jump to the top
             newY = Y + 1 if Y < L - 1 else 0
+        elif angle == 2: # jump to the top
+            newX = X - 1 if X > 0 else L - 1
         else: # jump to the bottom
             newY = Y - 1 if Y > 0 else L - 1
 
@@ -113,21 +114,37 @@ def get_image(particles, lattice, N, L):
     
     return im
 
+def count_blocked_particles(lattice, L):
+    sum = 0
+    for X in range(L):
+        for Y in range(L):
+            nextX = X + 1 if X < L - 1 else 0
+            prevX = X - 1 if X > 0 else L - 1
+            nextY = Y + 1 if Y < L - 1 else 0
+            prevY = Y - 1 if Y > 0 else L - 1
+            if lattice[nextX][Y] == 1 and lattice[prevX][Y] == 1 and lattice[X][nextY] == 1 and lattice[X][prevY] == 1:
+                sum += 1 # blocked
+
+    return sum
+
 # Main
 if __name__ == '__main__':
 
     # simulation parameters
     runs = 1
-    sim_duration = 10000
+    sim_duration = 20000
     L = 200
-    density = 0.4
-    rotation_rate = 0.1
-    translate_along_rate = 0.85
-    translate_opposite_rate = 0.05
-    translate_transverse = 0.05
+    density = 0.2
+    rotation_rate = 0.0071
+    translate_along_rate = 0.8808
+    translate_opposite_rate = 0.035
+    translate_transverse = 0.035
+    sum_rates = rotation_rate*2 + translate_along_rate + translate_opposite_rate + 2*translate_transverse
+    if sum_rates != 1:
+        print("rates are chosen incorrectly! do not sum up to 1!")
     N = int(L*L*density)
-    print("N = ", N)
-    print("parameters chosen")
+    #print("N = ", N)
+    #print("parameters chosen")
 
     #for run in range(runs):
     #    print("run ", run)
@@ -164,15 +181,20 @@ if __name__ == '__main__':
     image = get_image(particles, lattice, N, L)
     image = Image.fromarray(np.uint8(image))
     images.append(image)
-    print("first image recorded")
+    #print("first image recorded")
 
+    blocked_vs_time = []
     for t in range(sim_duration):
-        print("timestep ", t)
+        if t % 100 == 0:
+            print("timestep ", t)
         for n in range(N):
-            update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate)
+            update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
+
+        blocked = count_blocked_particles(lattice, L) / N
+        blocked_vs_time.append(blocked)
 
         # collect system colored snapshot every 10 MCS
-        if t % 10 == 0:
+        if t % 100 == 0:
             image = get_image(particles, lattice, N, L)
             image = Image.fromarray(np.uint8(image))
             images.append(image)
@@ -187,12 +209,17 @@ if __name__ == '__main__':
         print("Number of particles changed!")
 
     # animation
-    filename = "./density_" + str(density) + "_L_" + str(L) + "_duration_" + str(sim_duration) + "_p_" + str(translate_along_rate) + "_rot_" + str(rotation_rate) + ".gif"
+    filename = "./output_normal/density_" + str(density) + "_L_" + str(L) + "_duration_" + str(sim_duration) + "_p_" + str(translate_along_rate) + "_rot_" + str(rotation_rate) + ".gif"
     images[0].save(filename,
                save_all=True, append_images=images[1:], optimize=False, duration=40, loop=0)
 
+    filename2 = "./output_normal/blocked_vs_t_den_" + str(density) + "_L_" + str(L) + "_T_" + str(sim_duration) + "_p_" + str(translate_along_rate) + "_rot_" + str(rotation_rate) + ".txt"
+    with open(filename2, 'w') as f:
+        for t in range(sim_duration):
+            output_string = str(t) + "\t" + str(blocked_vs_time[t]) + "\n"
+            f.write(output_string)
 
-    '''
+'''
     import matplotlib.animation as animation
     fig = plt.figure(figsize=(24, 24))
     im = plt.imshow(memory[:, :, 1], interpolation="none", aspect="auto", vmin=0, vmax=1)
@@ -214,12 +241,4 @@ if __name__ == '__main__':
     filename_animation = "anim_T" + str(Temp) + "_M=" + str(total_magnetization[sim_duration-1]) + ".mp4"
     anim.save(filename_animation, fps=fps, extra_args=["-vcodec", "libx264"])
     print("Done!")
-
-
-
-    filename = "2d_random_decay_L" + str(L) + "_runs" + str(runs) + ".txt"
-    with open(filename, 'w') as f:
-        for t in range(Nt):
-            output_string = str(t) + "\t" + str(particles_left[t]) + "\n"
-            f.write(output_string)
 '''
