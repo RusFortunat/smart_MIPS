@@ -7,6 +7,10 @@
 # input state: density, Pe number, fraction of blocked particles, ...? 
 # output: +\delta forward_jump_rate, -\delta forward_jump_rate
 
+# The overall goal for this project would be to teach network to make state-to-state transitions -- starting 
+# from some random steady state, we want network to reach the target steady state by adjusting system parameters.
+# Specifically, we want network to learn to be able to control the size of the droplets by adjusting the Peclet number.
+
 import math
 import numpy as np
 import random
@@ -221,78 +225,92 @@ def optimize_model():
     optimizer.step()
 
 
-def do_training(num_episodes, L, sim_duration):
-    # we choose different parameters every episode
-    for i_episode in range(num_episodes):
-        # initial parameters
-        density = random.uniform(0, 0.5)
-        N = int(L*L*density)
-        starting_translate_along_rate = random.uniform(0, 0.95)
-        # to set the other rates, i will use the original model reference that i mention at the top
-        alpha = 0.035 / 0.0071 # took form paper; alpha = translate_transverse / rotation_rate, with rotation_rate=0.1, translate_transverse=1, translate_along_rate=25
-        starting_rotation_rate = (1 - starting_translate_along_rate) / (3*alpha + 2)
-        starting_translate_transverse = alpha * starting_rotation_rate
-        starting_translate_opposite_rate = starting_translate_transverse
+def do_training(num_episodes, L, sim_duration, forw_rate_increment):
+    # training will be done for a few target droplet sizes that is represented by a fraction of completely surrounded particles
+    # in the steady state
+    for train in range(10): # let's train the network for 10 randomly chosen target blocked fractions
+        target_fraction = random.uniform(0,0.8) # doesn't look like it's possible to go beyond 0.8
+        print("target fraction of blocked particles", target_fraction)
+        # we choose different initial conditions every episode
+        for i_episode in range(num_episodes):
+            print("Episode ", i_episode)
+            # initial conditions
+            density = random.uniform(0, 0.5)
+            N = int(L*L*density)
+            particles = []
+            lattice = np.zeros(shape=(L, L))
+            n = 0
+            while n < N:
+                X = random.randint(0, L-1)
+                Y = random.randint(0, L-1)
+                if lattice[X][Y] == 0: 
+                    lattice[X][Y] = 1
+                    angle = random.randint(0,3)
+                    entry = [X,Y,angle] 
+                    particles.append(entry)
+                    n += 1       
+            
+            # to set the other rates, i will use the original model reference that i mention at the top
+            translate_along_rate = random.uniform(0, 0.95)
+            alpha = 0.035 / 0.0071 # took form paper; alpha = translate_transverse / rotation_rate, with rotation_rate=0.1, translate_transverse=1, translate_along_rate=25
+            rotation_rate = (1 - translate_along_rate) / (3*alpha + 2)
+            translate_transverse = alpha * rotation_rate
+            translate_opposite_rate = translate_transverse
+            print("starting rates: v_+ =  ", translate_along_rate, "; v_0 = ", translate_transverse, "; D_r = ", rotation_rate)
 
-        translate_along_rate = starting_translate_along_rate
-        rotation_rate = starting_rotation_rate
-        translate_transverse = starting_translate_transverse
-        translate_opposite_rate = starting_translate_opposite_rate
-        
-        # initial conditions
-        particles = []
-        lattice = np.zeros(shape=(L, L))
-        n = 0
-        while n < N:
-            X = random.randint(0, L-1)
-            Y = random.randint(0, L-1)
-            if lattice[X][Y] == 0: 
-                lattice[X][Y] = 1
-                angle = random.randint(0,3)
-                entry = [X,Y,angle] 
-                particles.append(entry)
-                n += 1
+            # first, relax from the initial conditions
+            for t in range(1000):
+                for n in range(N):
+                    update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
 
-        # main update loop; I use Monte Carlo random sequential updates here
-        score = 0
-        for t in range(sim_duration):
-            for n in range(N):
-                update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
+            blocked_fraction = count_blocked_particles(lattice, L) / N
+            print("system relaxed from its initial conditions; current fraction of blocked particles ", blocked_fraction)
 
-            # we start adjusting system parameters after initial transient behavior 
-            if t > 1000:
+            # adjust parameters every 1000 time steps to let the system relax to its steady state
+            score = 0
+            for update_params in range(100):
 
-                blocked_fraction = count_blocked_particles(lattice, L) / N
-
-                state = [density, translate_along_rate, blocked_fraction] # not sure if we need to pass anything else
+                state = [density, translate_along_rate, blocked_fraction, target_fraction] 
                 #print("state before ", state)
                 state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
-                action = select_action_training(state) # increment
-                translate_along_rate += action
+                action = select_action_training(state, n_actions) # increase or decrease the forward jumping rate
+                delta = +forw_rate_increment if action == 0 else -forw_rate_increment
+                
+                translate_along_rate += delta
                 rotation_rate = (1 - translate_along_rate) / (3*alpha + 2)
                 translate_transverse = alpha * rotation_rate
                 translate_opposite_rate = translate_transverse
 
+                # relax to the steady state; here i assume that after 500 updates the system would reach the new steady state
+                for t in range(500):
+                    for n in range(N):
+                        update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
+
+                blocked_fraction = count_blocked_particles(lattice, L) / N      # new fraction of blocked particles
+
                 #print("action ", action.item())
                 reward = - abs(blocked_fraction - target_fraction)
-                next_state = [density, translate_along_rate, blocked_fraction] # update particle's position and do stochastic part
-                #print("reward ", reward)
                 reward = torch.tensor([reward], device=device)
+                #print("reward ", reward)
+                next_state = [density, translate_along_rate, blocked_fraction, target_fraction] 
                 #print("state after ", next_state)
                 next_state = torch.tensor(next_state, dtype=torch.float32, device=device).unsqueeze(0) 
                 memory.push(state, action, next_state, reward)           
                 score += reward
 
-                optimize_model() # optimize both predators and prey networks
-                # Soft update of the target network's weights: θ′ ← τ θ + (1 −τ)θ′
-                target_net_state_dict = target_net.state_dict()
-                policy_net_state_dict = policy_net.state_dict()
-                for key in policy_net_state_dict:
-                    target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
-                target_net.load_state_dict(target_net_state_dict)
+                if len(memory) > BATCH_SIZE:
+                    optimize_model() # optimize both predators and prey networks
+                    # Soft update of the target network's weights: θ′ ← τ θ + (1 −τ)θ′
+                    target_net_state_dict = target_net.state_dict()
+                    policy_net_state_dict = policy_net.state_dict()
+                    for key in policy_net_state_dict:
+                        target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
+                    target_net.load_state_dict(target_net_state_dict)
 
-        rewards.append(score) 
-        plot_score()
+            print("fraction of blocked particles after training ", blocked_fraction, "; target fraction ", target_fraction)
+            print("final rates: v_+ =  ", translate_along_rate, "; v_0 = ", translate_transverse, "; D_r = ", rotation_rate)
+            rewards.append(score) 
+            plot_score()
 
     torch.save(target_net.state_dict(), PATH)
     plot_score(show_result=True)
@@ -310,13 +328,8 @@ def plot_score(show_result=False):
         plt.title('Training...')
     plt.xlabel('Episode')
     plt.ylabel('Episode Duration')
-    plt.plot(episode_durations)
     plt.plot(rewards)
-    if len(episode_durations) >= 20:
-        durations_t = torch.tensor(episode_durations, dtype=torch.float)
-        means = durations_t.unfold(0, 20, 1).mean(1).view(-1)
-        means = torch.cat((torch.zeros(19), means))
-        plt.plot(means.numpy())
+    if len(rewards) >= 20:
         rewards_mean = torch.tensor(rewards, dtype=torch.float)
         means_r = rewards_mean.unfold(0, 20, 1).mean(1).view(-1)
         means_r = torch.cat((torch.zeros(19), means_r))
@@ -337,18 +350,18 @@ if __name__ == '__main__':
     Jesse_we_need_to_train_NN = True
     ############# Model parameters for Machine Learning #############
     num_episodes = 100      # number of training episodes
-    BATCH_SIZE = 200        # the number of transitions sampled from the replay buffer
+    BATCH_SIZE = 100        # the number of transitions sampled from the replay buffer
     GAMMA = 0.99            # the discounting factor
     EPS_START = 0.9         # EPS_START is the starting value of epsilon; determines how random our action choises are at the beginning
     EPS_END = 0.001         # EPS_END is the final value of epsilon
-    EPS_DECAY = 500        # EPS_DECAY controls the rate of exponential decay of epsilon, higher means a slower decay
+    EPS_DECAY = 1000        # EPS_DECAY controls the rate of exponential decay of epsilon, higher means a slower decay
     TAU = 0.005             # TAU is the update rate of the target network
     LR = 1e-3               # LR is the learning rate of the AdamW optimizer
     ############# Lattice simulation parameters #############
     sim_duration = 5000
-    target_fraction = 0.1
+    forw_rate_increment = 0.05
     L = 100
-    n_observations = 3      # just give network a difference between positive and negative spins
+    n_observations = 5      # just give network a difference between positive and negative spins
     n_actions = 2           # the particle can jump on any neighboring lattice sites, or stay put and eat
     hidden_size = 32        # hidden size of the network
     PATH = "./NN_params.txt"
@@ -362,9 +375,8 @@ if __name__ == '__main__':
         memory = ReplayMemory(100*sim_duration) # the overall memory batch size 
         #memory_prey = ReplayMemory(Nt) # the overall memory batch size 
         rewards = []
-        episode_durations = []
         steps_done = 0 
-        do_training(num_episodes, L, sim_duration, target_fraction) 
+        do_training(num_episodes, L, sim_duration, forw_rate_increment) 
 
     ############# Training summary ######################
     trained_net = DQN(n_observations, hidden_size, n_actions).to(device)
