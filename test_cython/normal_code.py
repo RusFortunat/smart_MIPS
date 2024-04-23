@@ -99,7 +99,7 @@ if __name__ == '__main__':
     runs = 10
 
     for i in range(runs):
-
+        print("run ", i)
         density = random.uniform(0.1, 0.5)
         N = int(L*L*density)
         # to set the rates, i will use the original model reference that i mention at the top
@@ -111,8 +111,8 @@ if __name__ == '__main__':
         print("density ", round(density,2), "v_+ =  ", translate_along_rate, "; v_0 = ", translate_transverse, "; D_r = ", rotation_rate)
         
         # Cython execution
-        c_particles = []
-        c_lattice = np.zeros(shape=(L, L))
+        c_particles = np.zeros(shape=(N,3), dtype=int)
+        c_lattice = np.zeros(shape=(L, L), dtype=int)
         n = 0
         while n < N:
             X = random.randint(0, L-1)
@@ -120,13 +120,21 @@ if __name__ == '__main__':
             if c_lattice[X][Y] == 0: 
                 c_lattice[X][Y] = 1
                 angle = random.randint(0,3)
-                entry = [X,Y,angle] 
-                c_particles.append(entry)
+                c_particles[n][0] = X
+                c_particles[n][1] = Y
+                c_particles[n][2] = angle
+                #entry = [X,Y,angle] 
+                #c_particles.append(entry)
                 n += 1 
+                
+        #print("For Cython")
+        #print("lattice ",c_lattice,"\n")
+        #print("particles ",c_particles,"\n")
+        
                 
         start_time = time.time()
         c_run(c_lattice, c_particles, sim_duration, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
-        c_blocked = c_count_blocked(c_lattice, L)  
+        c_blocked = c_count_blocked(c_lattice, L) / N 
         print("Cython execution time %s seconds" % (time.time() - start_time), "; blocked fraction ", c_blocked)
         
         # python execution
@@ -150,5 +158,5 @@ if __name__ == '__main__':
                 update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
 
         blocked = count_blocked_particles(lattice, L) / N
-        print("Python execution time %s seconds" % (time.time() - start_time), "; blocked fraction ", blocked)
+        print("Python execution time %s seconds" % (time.time() - start_time), "; blocked fraction ", blocked, "\n")
             
