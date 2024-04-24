@@ -111,8 +111,8 @@ if __name__ == '__main__':
         print("density ", round(density,2), "v_+ =  ", translate_along_rate, "; v_0 = ", translate_transverse, "; D_r = ", rotation_rate)
         
         # Cython execution
-        c_particles = np.zeros(shape=(N,3), dtype=int)
-        c_lattice = np.zeros(shape=(L, L), dtype=int)
+        c_particles = np.zeros(shape=(N,3), dtype=np.int32)
+        c_lattice = np.zeros(shape=(L, L), dtype=np.int32)
         n = 0
         while n < N:
             X = random.randint(0, L-1)
