@@ -13,6 +13,22 @@ cdef extern from "<random>" namespace "std":
         uniform_real_distribution(T a, T b)
         T operator()(mt19937 gen) # ignore the possibility of using other classes for "gen"
 
+#cdef count_blocked_c(int [:, :] lattice, int L):
+#    cdef int sum
+#    cdef int pdf[5]
+#    pdf[:] = [0,0,0,0,0]
+#    cdef int nextX, nextY, prevX, prevY
+#    for X in range(L):
+#        for Y in range(L):
+#            nextX = X + 1 if X < L - 1 else 0
+#            prevX = X - 1 if X > 0 else L - 1
+#            nextY = Y + 1 if Y < L - 1 else 0
+#            prevY = Y - 1 if Y > 0 else L - 1
+#            sum = lattice[nextX][Y] + lattice[prevX][Y] + lattice[X][nextY] + lattice[X][prevY]
+#            pdf[sum] += 1
+#
+#    return pdf
+
 cdef int count_blocked_c(int [:, :] lattice, int L):
     cdef int sum = 0
     cdef int nextX, nextY, prevX, prevY

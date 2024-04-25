@@ -150,10 +150,8 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
     for i_episode in range(num_episodes):
         # initial conditions
         density = random.uniform(0.1, 0.5)
-        density = round(density, 4)
         print("Episode ", i_episode, "; density ", density)
         target_fraction = random.uniform(0.2,0.5) # doesn't look like it's possible to go beyond 0.8
-        target_fraction = round(target_fraction, 4)
         N = int(L*L*density)
         particles = np.zeros(shape=(N,3), dtype=np.int32)
         lattice = np.zeros(shape=(L, L), dtype=np.int32)
@@ -183,7 +181,6 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
                 #update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
         c_run(lattice, particles, relaxation_time, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
         blocked_fraction = c_count_blocked(lattice, L) / N 
-        blocked_fraction = round(blocked_fraction, 4)
         starting_fraction = blocked_fraction
         #print("system relaxed from its initial conditions")
 
@@ -191,9 +188,7 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
         score = 0
         for update_params in range(update_attempts):
 
-            blocked_delta_before = abs(blocked_fraction - target_fraction)
-            rate_to_state = round(translate_along_rate, 4)
-            state = [density, rate_to_state, blocked_fraction, target_fraction] 
+            state = [density, translate_along_rate, blocked_fraction - target_fraction] 
             #print("state before ", state)
             state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
             action = select_action_training(state, n_actions) # increase or decrease the forward jumping rate
@@ -217,19 +212,12 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
             #        update(particles, lattice, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
             c_run(lattice, particles, update_time, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
             blocked_fraction = c_count_blocked(lattice, L) / N 
-            blocked_fraction = round(blocked_fraction, 4)
 
-            blocked_delta_after = abs(blocked_fraction - target_fraction)
             #print("action ", action.item())
-            resulting_delta = blocked_delta_after - blocked_delta_before
-            if resulting_delta < 0:
-                reward += -1.0 * resulting_delta
-            else:
-                reward += -10 * resulting_delta # if delta decreased, get positive reward
+            reward += -10.0 * abs(blocked_fraction - target_fraction)
             reward = torch.tensor([reward], dtype=torch.float32, device=device)
             #print("reward ", reward)
-            rate_to_state = round(translate_along_rate, 4)
-            next_state = [density, rate_to_state, blocked_fraction, target_fraction] 
+            next_state = [density, translate_along_rate, blocked_fraction - target_fraction] 
             #print("state after ", next_state)
             next_state = torch.tensor(next_state, dtype=torch.float32, device=device).unsqueeze(0) 
             memory.push(state, action, next_state, reward)           
@@ -312,7 +300,7 @@ if __name__ == '__main__':
     update_attempts = 100
     forw_rate_increment = 0.02
     L = 100
-    n_observations = 4      # just give network a difference between positive and negative spins
+    n_observations = 3      # just give network a difference between positive and negative spins
     n_actions = 2           # the particle can jump on any neighboring lattice sites, or stay put and eat
     hidden_size = 32        # hidden size of the network
     policy_PATH = "./policyNN_params.txt"
