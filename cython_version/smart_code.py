@@ -286,7 +286,7 @@ if __name__ == '__main__':
     Jesse_we_need_to_train_NN = True
     continue_training = False
     ############# Model parameters for Machine Learning #############
-    num_episodes = 300      # number of training episodes
+    num_episodes = 200      # number of training episodes
     BATCH_SIZE = 100        # the number of transitions sampled from the replay buffer
     GAMMA = 0.99            # the discounting factor
     EPS_START = 0.9         # EPS_START is the starting value of epsilon; determines how random our action choises are at the beginning
@@ -298,7 +298,7 @@ if __name__ == '__main__':
     relaxation_time = 10000
     update_time = 1000
     update_attempts = 100
-    forw_rate_increment = 0.02
+    forw_rate_increment = 0.01
     L = 100
     n_observations = 3      # just give network a difference between positive and negative spins
     n_actions = 2           # the particle can jump on any neighboring lattice sites, or stay put and eat
