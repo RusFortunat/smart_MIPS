@@ -12,7 +12,7 @@ data = np.loadtxt(filename)
 
 x_dat = data[:,0]
 y_dat = data[:,1]
-z_dat = data[:,2]
+z_dat = data[:,3]
 
 # Convert from pandas dataframes to numpy arrays
 X, Y, Z, = np.array([]), np.array([]), np.array([])
@@ -41,11 +41,12 @@ zi[(zi<zmin) | (zi>zmax)] = None
 
 # Create the contour plot
 plt.axis([0.1, 0.5, 0.6, 1.0])
-plt.xlabel(r"$\rho$")
-plt.ylabel(r"$v_+$")
+plt.xlabel(r"$\rho$", fontsize=24)
+plt.ylabel(r"$v_+$", fontsize=24)
 CS = plt.contourf(xi, yi, zi, 15, cmap=plt.cm.rainbow,
                   vmax=zmax, vmin=zmin)
 plt.colorbar() 
+plt.tight_layout()
 
 plt.savefig(output, format = "pdf", dpi = 300)
 plt.show()
