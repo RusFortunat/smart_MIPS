@@ -79,7 +79,7 @@ def select_action_training(state, n_actions):
         rand_aciton = random.randint(0, n_actions-1) # left, right, top, bottom
         return torch.tensor([[rand_aciton]], device=device, dtype=torch.long)
 
-def select_action_post_training(state, T): 
+def select_action_post_training(state, n_actions, T): 
     # interpret Q values as probabilities when simulating dynamics of the system 
     # in principle this could be easily extended to make this more general, but i am a lazy boi
     with torch.no_grad():
@@ -149,9 +149,9 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
     # we choose different initial conditions every episode
     for i_episode in range(num_episodes):
         # initial conditions
-        density = random.uniform(0.1, 0.5)
+        density = random.uniform(0.05, 0.5)
         print("Episode ", i_episode, "; density ", density)
-        target_fraction = random.uniform(0.2,0.5) # doesn't look like it's possible to go beyond 0.8
+        target_fraction = random.uniform(0.1,0.8) # doesn't look like it's possible to go beyond 0.8
         N = int(L*L*density)
         particles = np.zeros(shape=(N,3), dtype=np.int32)
         lattice = np.zeros(shape=(L, L), dtype=np.int32)
@@ -188,7 +188,7 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
         score = 0
         for update_params in range(update_attempts):
 
-            state = [density, translate_along_rate, blocked_fraction - target_fraction] 
+            state = [density, translate_along_rate, target_fraction, blocked_fraction, blocked_fraction - target_fraction] 
             #print("state before ", state)
             state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
             action = select_action_training(state, n_actions) # increase or decrease the forward jumping rate
@@ -199,8 +199,8 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
             if translate_along_rate < forw_rate_increment:
                 translate_along_rate = forw_rate_increment
                 reward = -100
-            elif translate_along_rate > 0.95:
-                translate_along_rate = 0.95
+            elif translate_along_rate > 0.999:
+                translate_along_rate = 0.999
                 reward = -100
             rotation_rate = (1 - translate_along_rate) / (3*alpha + 2)
             translate_transverse = alpha * rotation_rate
@@ -217,7 +217,7 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
             reward += -10.0 * abs(blocked_fraction - target_fraction)
             reward = torch.tensor([reward], dtype=torch.float32, device=device)
             #print("reward ", reward)
-            next_state = [density, translate_along_rate, blocked_fraction - target_fraction] 
+            next_state = [density, translate_along_rate, target_fraction, blocked_fraction, blocked_fraction - target_fraction] 
             #print("state after ", next_state)
             next_state = torch.tensor(next_state, dtype=torch.float32, device=device).unsqueeze(0) 
             memory.push(state, action, next_state, reward)           
@@ -247,6 +247,62 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
     plt.ioff()
     #plt.show()
     plt.savefig("./Training.png", format="png", dpi=600)
+
+
+def evaluation(L, density, target_fraction, relaxation_time, update_time, update_attempts, forw_rate_increment, T):
+
+    N = int(L*L*density)
+    particles = np.zeros(shape=(N,3), dtype=np.int32)
+    lattice = np.zeros(shape=(L, L), dtype=np.int32)
+    n = 0
+    while n < N:
+        X = random.randint(0, L-1)
+        Y = random.randint(0, L-1)
+        if lattice[X][Y] == 0: 
+            lattice[X][Y] = 1
+            angle = random.randint(0,3)
+            particles[n][0] = X
+            particles[n][1] = Y
+            particles[n][2] = angle
+            n += 1       
+        
+    # to set the other rates, i will use the original model reference that i mention at the top
+    translate_along_rate = random.uniform(0, 0.95)
+    alpha = 0.035 / 0.0071 # took form paper; alpha = translate_transverse / rotation_rate, with rotation_rate=0.1, translate_transverse=1, translate_along_rate=25
+    rotation_rate = (1 - translate_along_rate) / (3*alpha + 2)
+    translate_transverse = alpha * rotation_rate
+    translate_opposite_rate = translate_transverse
+    print("starting rates: v_+ =  ", translate_along_rate, "; v_0 = ", translate_transverse, "; D_r = ", rotation_rate)
+
+    c_run(lattice, particles, relaxation_time, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
+    blocked_fraction = c_count_blocked(lattice, L) / N 
+    starting_fraction = blocked_fraction
+
+    for update_params in range(update_attempts):
+
+        state = [density, translate_along_rate, target_fraction, blocked_fraction, blocked_fraction - target_fraction] 
+        #print("state before ", state)
+        state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
+        action = select_action_post_training(state, n_actions, T) # increase or decrease the forward jumping rate
+        delta = +forw_rate_increment if action == 0 else -forw_rate_increment
+        
+        translate_along_rate += delta
+        if translate_along_rate < forw_rate_increment:
+                translate_along_rate = forw_rate_increment
+        elif translate_along_rate > 0.999:
+            translate_along_rate = 0.999
+        rotation_rate = (1 - translate_along_rate) / (3*alpha + 2)
+        translate_transverse = alpha * rotation_rate
+        translate_opposite_rate = translate_transverse
+
+        c_run(lattice, particles, update_time, N, L, rotation_rate, translate_along_rate, translate_opposite_rate, translate_transverse)
+        blocked_fraction = c_count_blocked(lattice, L) / N 
+
+    print("final rates: v_+ =  ", translate_along_rate, "; v_0 = ", translate_transverse, "; D_r = ", rotation_rate)
+    print("density", density, "; target ", target_fraction, "; starting fraction ", starting_fraction , "; after training ", blocked_fraction, "\n")
+    
+    return translate_along_rate, blocked_fraction
+
 
 # plots
 def plot_score(show_result=False):
@@ -291,16 +347,16 @@ if __name__ == '__main__':
     GAMMA = 0.99            # the discounting factor
     EPS_START = 0.9         # EPS_START is the starting value of epsilon; determines how random our action choises are at the beginning
     EPS_END = 0.001         # EPS_END is the final value of epsilon
-    EPS_DECAY = 1000        # EPS_DECAY controls the rate of exponential decay of epsilon, higher means a slower decay
+    EPS_DECAY = 5000        # EPS_DECAY controls the rate of exponential decay of epsilon, higher means a slower decay
     TAU = 0.005             # TAU is the update rate of the target network
     LR = 1e-3               # LR is the learning rate of the AdamW optimizer
     ############# Lattice simulation parameters #############
     relaxation_time = 10000
     update_time = 1000
     update_attempts = 100
-    forw_rate_increment = 0.01
+    forw_rate_increment = 0.02
     L = 100
-    n_observations = 3      # just give network a difference between positive and negative spins
+    n_observations = 5      # just give network a difference between positive and negative spins
     n_actions = 2           # the particle can jump on any neighboring lattice sites, or stay put and eat
     hidden_size = 32        # hidden size of the network
     policy_PATH = "./policyNN_params.txt"
@@ -326,19 +382,26 @@ if __name__ == '__main__':
 
 
     ############# Training summary ######################
-    #trained_net = DQN(n_observations, hidden_size, n_actions).to(device)
-    #trained_net.load_state_dict(torch.load(PATH))
+    trained_net = DQN(n_observations, hidden_size, n_actions).to(device)
+    trained_net.load_state_dict(torch.load(policy_PATH))
 
-    ############# Post-training simulation ##############
-
-
+    ############# Post-training evaluation ##############
     
+    T = 0.1
+    phase_diagram = [] 
+    for den in range(46):
+        density = 0.05 + 0.01*den
+        for tar in range(71):
+            target_frac = 0.1 + 0.01*tar
+            forward_rate, blocked_frac = evaluation(L, density, target_frac, relaxation_time, update_time, update_attempts, forw_rate_increment, T)
+            entry = [density, forward_rate, target_frac, blocked_frac, target_frac - blocked_frac]
+            phase_diagram.append(entry)
 
-    #filename = "results_L" + str(L) + "_runs" + str(runs) + ".txt"
-    #with open(filename, 'w') as f:
-    #    for t in range(Nt):
-    #        output_string = str(t) + "\t" + str(particles_left[t]) + "\n"
-    #        f.write(output_string)
+    filename = "results_L" + str(L) + "_L" + str(L) + ".txt"
+    with open(filename, 'w') as f:
+        for n in range(len(phase_diagram)):
+            output_string = str(phase_diagram[n][0]) + "\t" + str(phase_diagram[n][1]) + "\t" + str(phase_diagram[n][2]) + "\t" + str(phase_diagram[n][3]) + "\t" + str(phase_diagram[n][4]) + "\n"
+            f.write(output_string)
 
     # animation
     '''
