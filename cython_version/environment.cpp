@@ -17469,8 +17469,8 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "environment.pyx":16
- *         T operator()(mt19937 gen) # ignore the possibility of using other classes for "gen"
+/* "environment.pyx":32
+ * #    return pdf
  * 
  * cdef int count_blocked_c(int [:, :] lattice, int L):             # <<<<<<<<<<<<<<
  *     cdef int sum = 0
@@ -17507,7 +17507,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("count_blocked_c", 1);
 
-  /* "environment.pyx":17
+  /* "environment.pyx":33
  * 
  * cdef int count_blocked_c(int [:, :] lattice, int L):
  *     cdef int sum = 0             # <<<<<<<<<<<<<<
@@ -17516,16 +17516,16 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
  */
   __pyx_v_sum = 0;
 
-  /* "environment.pyx":19
+  /* "environment.pyx":35
  *     cdef int sum = 0
  *     cdef int nextX, nextY, prevX, prevY
  *     for X in range(L):             # <<<<<<<<<<<<<<
  *         for Y in range(L):
  *             nextX = X + 1 if X < L - 1 else 0
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_L); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_L); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
@@ -17533,9 +17533,9 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
     __pyx_t_3 = 0;
     __pyx_t_4 = NULL;
   } else {
-    __pyx_t_3 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
+    __pyx_t_3 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 19, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 35, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   for (;;) {
@@ -17544,28 +17544,28 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
         {
           Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 19, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 35, __pyx_L1_error)
           #endif
           if (__pyx_t_3 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_2); __pyx_t_3++; if (unlikely((0 < 0))) __PYX_ERR(0, 19, __pyx_L1_error)
+        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_2); __pyx_t_3++; if (unlikely((0 < 0))) __PYX_ERR(0, 35, __pyx_L1_error)
         #else
-        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       } else {
         {
           Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 19, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 35, __pyx_L1_error)
           #endif
           if (__pyx_t_3 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_2); __pyx_t_3++; if (unlikely((0 < 0))) __PYX_ERR(0, 19, __pyx_L1_error)
+        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_2); __pyx_t_3++; if (unlikely((0 < 0))) __PYX_ERR(0, 35, __pyx_L1_error)
         #else
-        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       }
@@ -17575,7 +17575,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 19, __pyx_L1_error)
+          else __PYX_ERR(0, 35, __pyx_L1_error)
         }
         break;
       }
@@ -17584,16 +17584,16 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
     __Pyx_XDECREF_SET(__pyx_v_X, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "environment.pyx":20
+    /* "environment.pyx":36
  *     cdef int nextX, nextY, prevX, prevY
  *     for X in range(L):
  *         for Y in range(L):             # <<<<<<<<<<<<<<
  *             nextX = X + 1 if X < L - 1 else 0
  *             prevX = X - 1 if X > 0 else L - 1
  */
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_L); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_L); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 20, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (likely(PyList_CheckExact(__pyx_t_5)) || PyTuple_CheckExact(__pyx_t_5)) {
@@ -17601,9 +17601,9 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
       __pyx_t_6 = 0;
       __pyx_t_7 = NULL;
     } else {
-      __pyx_t_6 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L1_error)
+      __pyx_t_6 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 20, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 36, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     for (;;) {
@@ -17612,28 +17612,28 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
           {
             Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_2);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 20, __pyx_L1_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 36, __pyx_L1_error)
             #endif
             if (__pyx_t_6 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_5); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 20, __pyx_L1_error)
+          __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_5); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 36, __pyx_L1_error)
           #else
-          __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 20, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           #endif
         } else {
           {
             Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_2);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 20, __pyx_L1_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 36, __pyx_L1_error)
             #endif
             if (__pyx_t_6 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_5); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 20, __pyx_L1_error)
+          __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_5); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 36, __pyx_L1_error)
           #else
-          __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 20, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           #endif
         }
@@ -17643,7 +17643,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 20, __pyx_L1_error)
+            else __PYX_ERR(0, 36, __pyx_L1_error)
           }
           break;
         }
@@ -17652,23 +17652,23 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
       __Pyx_XDECREF_SET(__pyx_v_Y, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "environment.pyx":21
+      /* "environment.pyx":37
  *     for X in range(L):
  *         for Y in range(L):
  *             nextX = X + 1 if X < L - 1 else 0             # <<<<<<<<<<<<<<
  *             prevX = X - 1 if X > 0 else L - 1
  *             nextY = Y + 1 if Y < L - 1 else 0
  */
-      __pyx_t_5 = __Pyx_PyInt_From_long((__pyx_v_L - 1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 21, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyInt_From_long((__pyx_v_L - 1)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 37, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_9 = PyObject_RichCompare(__pyx_v_X, __pyx_t_5, Py_LT); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 21, __pyx_L1_error)
+      __pyx_t_9 = PyObject_RichCompare(__pyx_v_X, __pyx_t_5, Py_LT); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 37, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 21, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 37, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       if (__pyx_t_10) {
-        __pyx_t_9 = __Pyx_PyInt_AddObjC(__pyx_v_X, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 21, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyInt_AddObjC(__pyx_v_X, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 37, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_9); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 21, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_9); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 37, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __pyx_t_8 = __pyx_t_11;
       } else {
@@ -17676,20 +17676,20 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
       }
       __pyx_v_nextX = __pyx_t_8;
 
-      /* "environment.pyx":22
+      /* "environment.pyx":38
  *         for Y in range(L):
  *             nextX = X + 1 if X < L - 1 else 0
  *             prevX = X - 1 if X > 0 else L - 1             # <<<<<<<<<<<<<<
  *             nextY = Y + 1 if Y < L - 1 else 0
  *             prevY = Y - 1 if Y > 0 else L - 1
  */
-      __pyx_t_9 = PyObject_RichCompare(__pyx_v_X, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 22, __pyx_L1_error)
-      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 22, __pyx_L1_error)
+      __pyx_t_9 = PyObject_RichCompare(__pyx_v_X, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_9); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 38, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 38, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       if (__pyx_t_10) {
-        __pyx_t_9 = __Pyx_PyInt_SubtractObjC(__pyx_v_X, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 22, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyInt_SubtractObjC(__pyx_v_X, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 38, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_9); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_9); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __pyx_t_8 = __pyx_t_11;
       } else {
@@ -17697,23 +17697,23 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
       }
       __pyx_v_prevX = __pyx_t_8;
 
-      /* "environment.pyx":23
+      /* "environment.pyx":39
  *             nextX = X + 1 if X < L - 1 else 0
  *             prevX = X - 1 if X > 0 else L - 1
  *             nextY = Y + 1 if Y < L - 1 else 0             # <<<<<<<<<<<<<<
  *             prevY = Y - 1 if Y > 0 else L - 1
  *             if lattice[nextX][Y] == 1 and lattice[prevX][Y] == 1 and lattice[X][nextY] == 1 and lattice[X][prevY] == 1:
  */
-      __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_L - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 23, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_L - 1)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 39, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_Y, __pyx_t_9, Py_LT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 23, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_Y, __pyx_t_9, Py_LT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 23, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 39, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (__pyx_t_10) {
-        __pyx_t_5 = __Pyx_PyInt_AddObjC(__pyx_v_Y, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 23, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyInt_AddObjC(__pyx_v_Y, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 23, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 39, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_8 = __pyx_t_11;
       } else {
@@ -17721,20 +17721,20 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
       }
       __pyx_v_nextY = __pyx_t_8;
 
-      /* "environment.pyx":24
+      /* "environment.pyx":40
  *             prevX = X - 1 if X > 0 else L - 1
  *             nextY = Y + 1 if Y < L - 1 else 0
  *             prevY = Y - 1 if Y > 0 else L - 1             # <<<<<<<<<<<<<<
  *             if lattice[nextX][Y] == 1 and lattice[prevX][Y] == 1 and lattice[X][nextY] == 1 and lattice[X][prevY] == 1:
  *                 sum += 1 # blocked
  */
-      __pyx_t_5 = PyObject_RichCompare(__pyx_v_Y, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 24, __pyx_L1_error)
-      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_5 = PyObject_RichCompare(__pyx_v_Y, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 40, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (__pyx_t_10) {
-        __pyx_t_5 = __Pyx_PyInt_SubtractObjC(__pyx_v_Y, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 24, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyInt_SubtractObjC(__pyx_v_Y, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_8 = __pyx_t_11;
       } else {
@@ -17742,14 +17742,14 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
       }
       __pyx_v_prevY = __pyx_t_8;
 
-      /* "environment.pyx":25
+      /* "environment.pyx":41
  *             nextY = Y + 1 if Y < L - 1 else 0
  *             prevY = Y - 1 if Y > 0 else L - 1
  *             if lattice[nextX][Y] == 1 and lattice[prevX][Y] == 1 and lattice[X][nextY] == 1 and lattice[X][prevY] == 1:             # <<<<<<<<<<<<<<
  *                 sum += 1 # blocked
  * 
  */
-      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_Y); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 25, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_Y); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L1_error)
       __pyx_t_13 = __pyx_v_nextX;
       __pyx_t_14 = __pyx_t_12;
       __pyx_t_15 = ((*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_lattice.data + __pyx_t_13 * __pyx_v_lattice.strides[0]) ) + __pyx_t_14 * __pyx_v_lattice.strides[1]) ))) == 1);
@@ -17758,7 +17758,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
         __pyx_t_10 = __pyx_t_15;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_Y); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 25, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_Y); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L1_error)
       __pyx_t_14 = __pyx_v_prevX;
       __pyx_t_13 = __pyx_t_12;
       __pyx_t_15 = ((*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_lattice.data + __pyx_t_14 * __pyx_v_lattice.strides[0]) ) + __pyx_t_13 * __pyx_v_lattice.strides[1]) ))) == 1);
@@ -17767,7 +17767,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
         __pyx_t_10 = __pyx_t_15;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_X); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 25, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_X); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L1_error)
       __pyx_t_13 = __pyx_t_12;
       __pyx_t_14 = __pyx_v_nextY;
       __pyx_t_15 = ((*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_lattice.data + __pyx_t_13 * __pyx_v_lattice.strides[0]) ) + __pyx_t_14 * __pyx_v_lattice.strides[1]) ))) == 1);
@@ -17776,7 +17776,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
         __pyx_t_10 = __pyx_t_15;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_X); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 25, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyIndex_AsSsize_t(__pyx_v_X); if (unlikely((__pyx_t_12 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L1_error)
       __pyx_t_14 = __pyx_t_12;
       __pyx_t_13 = __pyx_v_prevY;
       __pyx_t_15 = ((*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_lattice.data + __pyx_t_14 * __pyx_v_lattice.strides[0]) ) + __pyx_t_13 * __pyx_v_lattice.strides[1]) ))) == 1);
@@ -17784,7 +17784,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
       __pyx_L8_bool_binop_done:;
       if (__pyx_t_10) {
 
-        /* "environment.pyx":26
+        /* "environment.pyx":42
  *             prevY = Y - 1 if Y > 0 else L - 1
  *             if lattice[nextX][Y] == 1 and lattice[prevX][Y] == 1 and lattice[X][nextY] == 1 and lattice[X][prevY] == 1:
  *                 sum += 1 # blocked             # <<<<<<<<<<<<<<
@@ -17793,7 +17793,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
  */
         __pyx_v_sum = (__pyx_v_sum + 1);
 
-        /* "environment.pyx":25
+        /* "environment.pyx":41
  *             nextY = Y + 1 if Y < L - 1 else 0
  *             prevY = Y - 1 if Y > 0 else L - 1
  *             if lattice[nextX][Y] == 1 and lattice[prevX][Y] == 1 and lattice[X][nextY] == 1 and lattice[X][prevY] == 1:             # <<<<<<<<<<<<<<
@@ -17802,7 +17802,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
  */
       }
 
-      /* "environment.pyx":20
+      /* "environment.pyx":36
  *     cdef int nextX, nextY, prevX, prevY
  *     for X in range(L):
  *         for Y in range(L):             # <<<<<<<<<<<<<<
@@ -17812,7 +17812,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "environment.pyx":19
+    /* "environment.pyx":35
  *     cdef int sum = 0
  *     cdef int nextX, nextY, prevX, prevY
  *     for X in range(L):             # <<<<<<<<<<<<<<
@@ -17822,7 +17822,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "environment.pyx":28
+  /* "environment.pyx":44
  *                 sum += 1 # blocked
  * 
  *     return sum             # <<<<<<<<<<<<<<
@@ -17832,8 +17832,8 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
   __pyx_r = __pyx_v_sum;
   goto __pyx_L0;
 
-  /* "environment.pyx":16
- *         T operator()(mt19937 gen) # ignore the possibility of using other classes for "gen"
+  /* "environment.pyx":32
+ * #    return pdf
  * 
  * cdef int count_blocked_c(int [:, :] lattice, int L):             # <<<<<<<<<<<<<<
  *     cdef int sum = 0
@@ -17855,7 +17855,7 @@ static int __pyx_f_11environment_count_blocked_c(__Pyx_memviewslice __pyx_v_latt
   return __pyx_r;
 }
 
-/* "environment.pyx":30
+/* "environment.pyx":46
  *     return sum
  * 
  * def count_blocked(int [:, :] lattice, int L):             # <<<<<<<<<<<<<<
@@ -17919,7 +17919,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 46, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -17927,14 +17927,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 46, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("count_blocked", 1, 2, 2, 1); __PYX_ERR(0, 30, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("count_blocked", 1, 2, 2, 1); __PYX_ERR(0, 46, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "count_blocked") < 0)) __PYX_ERR(0, 30, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "count_blocked") < 0)) __PYX_ERR(0, 46, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -17942,12 +17942,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[0] = __Pyx_Arg_FASTCALL(__pyx_args, 0);
       values[1] = __Pyx_Arg_FASTCALL(__pyx_args, 1);
     }
-    __pyx_v_lattice = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_lattice.memview)) __PYX_ERR(0, 30, __pyx_L3_error)
-    __pyx_v_L = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_L == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
+    __pyx_v_lattice = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_lattice.memview)) __PYX_ERR(0, 46, __pyx_L3_error)
+    __pyx_v_L = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_L == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 46, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("count_blocked", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 30, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("count_blocked", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 46, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17986,7 +17986,7 @@ static PyObject *__pyx_pf_11environment_count_blocked(CYTHON_UNUSED PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("count_blocked", 1);
 
-  /* "environment.pyx":31
+  /* "environment.pyx":47
  * 
  * def count_blocked(int [:, :] lattice, int L):
  *     return count_blocked_c(lattice, L)             # <<<<<<<<<<<<<<
@@ -17994,14 +17994,14 @@ static PyObject *__pyx_pf_11environment_count_blocked(CYTHON_UNUSED PyObject *__
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_11environment_count_blocked_c(__pyx_v_lattice, __pyx_v_L); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_11environment_count_blocked_c(__pyx_v_lattice, __pyx_v_L); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "environment.pyx":30
+  /* "environment.pyx":46
  *     return sum
  * 
  * def count_blocked(int [:, :] lattice, int L):             # <<<<<<<<<<<<<<
@@ -18020,7 +18020,7 @@ static PyObject *__pyx_pf_11environment_count_blocked(CYTHON_UNUSED PyObject *__
   return __pyx_r;
 }
 
-/* "environment.pyx":34
+/* "environment.pyx":50
  * 
  * 
  * def run(int [:, :] lattice, int [:, :] particles, int simulation_time, int N, int L, double rotation_rate, double translate_along_rate, double translate_opposite_rate, double translate_transverse):             # <<<<<<<<<<<<<<
@@ -18105,7 +18105,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -18113,9 +18113,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 1); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 1); __PYX_ERR(0, 50, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -18123,9 +18123,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 2); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 2); __PYX_ERR(0, 50, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -18133,9 +18133,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 3); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 3); __PYX_ERR(0, 50, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -18143,9 +18143,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 4); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 4); __PYX_ERR(0, 50, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -18153,9 +18153,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 5); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 5); __PYX_ERR(0, 50, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -18163,9 +18163,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 6); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 6); __PYX_ERR(0, 50, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -18173,9 +18173,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 7); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 7); __PYX_ERR(0, 50, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
@@ -18183,14 +18183,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 8); __PYX_ERR(0, 34, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, 8); __PYX_ERR(0, 50, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "run") < 0)) __PYX_ERR(0, 34, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "run") < 0)) __PYX_ERR(0, 50, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 9)) {
       goto __pyx_L5_argtuple_error;
@@ -18205,19 +18205,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
     }
-    __pyx_v_lattice = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_lattice.memview)) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_particles = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_particles.memview)) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_simulation_time = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_simulation_time == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_N = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_N == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_L = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_L == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_rotation_rate = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_rotation_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_translate_along_rate = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_translate_along_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_translate_opposite_rate = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_translate_opposite_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
-    __pyx_v_translate_transverse = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_translate_transverse == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
+    __pyx_v_lattice = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_lattice.memview)) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_particles = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_particles.memview)) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_simulation_time = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_simulation_time == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_N = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_N == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_L = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_L == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_rotation_rate = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_rotation_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_translate_along_rate = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_translate_along_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_translate_opposite_rate = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_translate_opposite_rate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
+    __pyx_v_translate_transverse = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_translate_transverse == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, __pyx_nargs); __PYX_ERR(0, 34, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("run", 1, 9, 9, __pyx_nargs); __PYX_ERR(0, 50, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18276,7 +18276,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
   long __pyx_t_10;
   __Pyx_RefNannySetupContext("run", 1);
 
-  /* "environment.pyx":37
+  /* "environment.pyx":53
  * 
  *     cdef:
  *         mt19937 gen = mt19937(5)             # <<<<<<<<<<<<<<
@@ -18285,7 +18285,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
   __pyx_v_gen = std::mt19937(5);
 
-  /* "environment.pyx":38
+  /* "environment.pyx":54
  *     cdef:
  *         mt19937 gen = mt19937(5)
  *         uniform_real_distribution[double] dist = uniform_real_distribution[double](0.0,1.0)             # <<<<<<<<<<<<<<
@@ -18294,7 +18294,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
   __pyx_v_dist = std::uniform_real_distribution<double> (0.0, 1.0);
 
-  /* "environment.pyx":44
+  /* "environment.pyx":60
  *     cdef double dice, counter_or_clock_rotation
  * 
  *     for t in range (simulation_time):             # <<<<<<<<<<<<<<
@@ -18306,7 +18306,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_t = __pyx_t_3;
 
-    /* "environment.pyx":46
+    /* "environment.pyx":62
  *     for t in range (simulation_time):
  *         #printf("timestep %d", t, "\n")
  *         for n in range(N):             # <<<<<<<<<<<<<<
@@ -18318,7 +18318,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_n = __pyx_t_6;
 
-      /* "environment.pyx":49
+      /* "environment.pyx":65
  * 
  *             # pick random particle
  *             picked_particle = <int>(N * dist(gen))             # <<<<<<<<<<<<<<
@@ -18327,7 +18327,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
       __pyx_v_picked_particle = ((int)(__pyx_v_N * __pyx_v_dist(__pyx_v_gen)));
 
-      /* "environment.pyx":51
+      /* "environment.pyx":67
  *             picked_particle = <int>(N * dist(gen))
  *             #printf("picked particke %d\n", picked_particle)
  *             X = particles[picked_particle][0]             # <<<<<<<<<<<<<<
@@ -18338,7 +18338,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
       __pyx_t_8 = 0;
       __pyx_v_X = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_particles.data + __pyx_t_7 * __pyx_v_particles.strides[0]) ) + __pyx_t_8 * __pyx_v_particles.strides[1]) )));
 
-      /* "environment.pyx":52
+      /* "environment.pyx":68
  *             #printf("picked particke %d\n", picked_particle)
  *             X = particles[picked_particle][0]
  *             Y = particles[picked_particle][1]             # <<<<<<<<<<<<<<
@@ -18349,7 +18349,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
       __pyx_t_7 = 1;
       __pyx_v_Y = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_particles.data + __pyx_t_8 * __pyx_v_particles.strides[0]) ) + __pyx_t_7 * __pyx_v_particles.strides[1]) )));
 
-      /* "environment.pyx":53
+      /* "environment.pyx":69
  *             X = particles[picked_particle][0]
  *             Y = particles[picked_particle][1]
  *             angle = particles[picked_particle][2]             # <<<<<<<<<<<<<<
@@ -18360,7 +18360,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
       __pyx_t_8 = 2;
       __pyx_v_angle = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_particles.data + __pyx_t_7 * __pyx_v_particles.strides[0]) ) + __pyx_t_8 * __pyx_v_particles.strides[1]) )));
 
-      /* "environment.pyx":58
+      /* "environment.pyx":74
  *             # 0 -- +X, 1 -- +Y, 2 -- -X, 3 -- -Y
  * 
  *             dice = dist(gen)             # <<<<<<<<<<<<<<
@@ -18369,7 +18369,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
       __pyx_v_dice = __pyx_v_dist(__pyx_v_gen);
 
-      /* "environment.pyx":61
+      /* "environment.pyx":77
  *             #printf("dice %f\n", dice)
  *             # rotate
  *             if dice < 2*rotation_rate:             # <<<<<<<<<<<<<<
@@ -18379,7 +18379,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
       __pyx_t_9 = (__pyx_v_dice < (2.0 * __pyx_v_rotation_rate));
       if (__pyx_t_9) {
 
-        /* "environment.pyx":63
+        /* "environment.pyx":79
  *             if dice < 2*rotation_rate:
  *                 #printf("enter rotattion\n")
  *                 counter_or_clock_rotation = dist(gen)             # <<<<<<<<<<<<<<
@@ -18388,7 +18388,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
         __pyx_v_counter_or_clock_rotation = __pyx_v_dist(__pyx_v_gen);
 
-        /* "environment.pyx":64
+        /* "environment.pyx":80
  *                 #printf("enter rotattion\n")
  *                 counter_or_clock_rotation = dist(gen)
  *                 new_angle = 0             # <<<<<<<<<<<<<<
@@ -18397,7 +18397,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
         __pyx_v_new_angle = 0;
 
-        /* "environment.pyx":65
+        /* "environment.pyx":81
  *                 counter_or_clock_rotation = dist(gen)
  *                 new_angle = 0
  *                 if counter_or_clock_rotation < 0.5: # +pi/2             # <<<<<<<<<<<<<<
@@ -18407,7 +18407,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
         __pyx_t_9 = (__pyx_v_counter_or_clock_rotation < 0.5);
         if (__pyx_t_9) {
 
-          /* "environment.pyx":66
+          /* "environment.pyx":82
  *                 new_angle = 0
  *                 if counter_or_clock_rotation < 0.5: # +pi/2
  *                     new_angle = angle + 1 if angle != 3 else 0             # <<<<<<<<<<<<<<
@@ -18422,7 +18422,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           }
           __pyx_v_new_angle = __pyx_t_10;
 
-          /* "environment.pyx":65
+          /* "environment.pyx":81
  *                 counter_or_clock_rotation = dist(gen)
  *                 new_angle = 0
  *                 if counter_or_clock_rotation < 0.5: # +pi/2             # <<<<<<<<<<<<<<
@@ -18432,7 +18432,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           goto __pyx_L8;
         }
 
-        /* "environment.pyx":68
+        /* "environment.pyx":84
  *                     new_angle = angle + 1 if angle != 3 else 0
  *                 else: # -pi/2
  *                     new_angle = angle - 1 if angle != 0 else 3             # <<<<<<<<<<<<<<
@@ -18450,7 +18450,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
         }
         __pyx_L8:;
 
-        /* "environment.pyx":69
+        /* "environment.pyx":85
  *                 else: # -pi/2
  *                     new_angle = angle - 1 if angle != 0 else 3
  *                 particles[picked_particle][2] = new_angle             # <<<<<<<<<<<<<<
@@ -18461,7 +18461,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
         __pyx_t_7 = 2;
         *((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_particles.data + __pyx_t_8 * __pyx_v_particles.strides[0]) ) + __pyx_t_7 * __pyx_v_particles.strides[1]) )) = __pyx_v_new_angle;
 
-        /* "environment.pyx":61
+        /* "environment.pyx":77
  *             #printf("dice %f\n", dice)
  *             # rotate
  *             if dice < 2*rotation_rate:             # <<<<<<<<<<<<<<
@@ -18471,7 +18471,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
         goto __pyx_L7;
       }
 
-      /* "environment.pyx":74
+      /* "environment.pyx":90
  *             else:
  *                 #printf("inside translate\n")
  *                 newX = X             # <<<<<<<<<<<<<<
@@ -18481,7 +18481,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
       /*else*/ {
         __pyx_v_newX = __pyx_v_X;
 
-        /* "environment.pyx":75
+        /* "environment.pyx":91
  *                 #printf("inside translate\n")
  *                 newX = X
  *                 newY = Y             # <<<<<<<<<<<<<<
@@ -18490,7 +18490,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
         __pyx_v_newY = __pyx_v_Y;
 
-        /* "environment.pyx":77
+        /* "environment.pyx":93
  *                 newY = Y
  *                 # could be a smarter way to encode all what is below
  *                 if dice < translate_along_rate + 2*rotation_rate: # jump along the director             # <<<<<<<<<<<<<<
@@ -18500,7 +18500,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
         __pyx_t_9 = (__pyx_v_dice < (__pyx_v_translate_along_rate + (2.0 * __pyx_v_rotation_rate)));
         if (__pyx_t_9) {
 
-          /* "environment.pyx":78
+          /* "environment.pyx":94
  *                 # could be a smarter way to encode all what is below
  *                 if dice < translate_along_rate + 2*rotation_rate: # jump along the director
  *                     if angle == 0: # jump to the right, +X             # <<<<<<<<<<<<<<
@@ -18510,7 +18510,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           switch (__pyx_v_angle) {
             case 0:
 
-            /* "environment.pyx":79
+            /* "environment.pyx":95
  *                 if dice < translate_along_rate + 2*rotation_rate: # jump along the director
  *                     if angle == 0: # jump to the right, +X
  *                         newX = X + 1 if X < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18525,7 +18525,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             }
             __pyx_v_newX = __pyx_t_10;
 
-            /* "environment.pyx":78
+            /* "environment.pyx":94
  *                 # could be a smarter way to encode all what is below
  *                 if dice < translate_along_rate + 2*rotation_rate: # jump along the director
  *                     if angle == 0: # jump to the right, +X             # <<<<<<<<<<<<<<
@@ -18535,7 +18535,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             break;
             case 1:
 
-            /* "environment.pyx":81
+            /* "environment.pyx":97
  *                         newX = X + 1 if X < L - 1 else 0
  *                     elif angle == 1: # jump to the top, +Y
  *                         newY = Y + 1 if Y < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18550,7 +18550,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             }
             __pyx_v_newY = __pyx_t_10;
 
-            /* "environment.pyx":80
+            /* "environment.pyx":96
  *                     if angle == 0: # jump to the right, +X
  *                         newX = X + 1 if X < L - 1 else 0
  *                     elif angle == 1: # jump to the top, +Y             # <<<<<<<<<<<<<<
@@ -18560,7 +18560,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             break;
             case 2:
 
-            /* "environment.pyx":83
+            /* "environment.pyx":99
  *                         newY = Y + 1 if Y < L - 1 else 0
  *                     elif angle == 2: # jump to the left, -X
  *                         newX = X - 1 if X > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18575,7 +18575,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             }
             __pyx_v_newX = __pyx_t_10;
 
-            /* "environment.pyx":82
+            /* "environment.pyx":98
  *                     elif angle == 1: # jump to the top, +Y
  *                         newY = Y + 1 if Y < L - 1 else 0
  *                     elif angle == 2: # jump to the left, -X             # <<<<<<<<<<<<<<
@@ -18585,7 +18585,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             break;
             default:
 
-            /* "environment.pyx":85
+            /* "environment.pyx":101
  *                         newX = X - 1 if X > 0 else L - 1
  *                     else: # jump to the bottom, -Y
  *                         newY = Y - 1 if Y > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18602,7 +18602,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             break;
           }
 
-          /* "environment.pyx":77
+          /* "environment.pyx":93
  *                 newY = Y
  *                 # could be a smarter way to encode all what is below
  *                 if dice < translate_along_rate + 2*rotation_rate: # jump along the director             # <<<<<<<<<<<<<<
@@ -18612,7 +18612,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           goto __pyx_L9;
         }
 
-        /* "environment.pyx":87
+        /* "environment.pyx":103
  *                         newY = Y - 1 if Y > 0 else L - 1
  *                 else:
  *                     if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate: # jump against the director             # <<<<<<<<<<<<<<
@@ -18623,7 +18623,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           __pyx_t_9 = (__pyx_v_dice < ((__pyx_v_translate_along_rate + (2.0 * __pyx_v_rotation_rate)) + __pyx_v_translate_opposite_rate));
           if (__pyx_t_9) {
 
-            /* "environment.pyx":88
+            /* "environment.pyx":104
  *                 else:
  *                     if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate: # jump against the director
  *                         if angle == 0: # jump to the right, +X --> to the left, -X             # <<<<<<<<<<<<<<
@@ -18633,7 +18633,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             switch (__pyx_v_angle) {
               case 0:
 
-              /* "environment.pyx":89
+              /* "environment.pyx":105
  *                     if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate: # jump against the director
  *                         if angle == 0: # jump to the right, +X --> to the left, -X
  *                             newX = X - 1 if X > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18648,7 +18648,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               }
               __pyx_v_newX = __pyx_t_10;
 
-              /* "environment.pyx":88
+              /* "environment.pyx":104
  *                 else:
  *                     if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate: # jump against the director
  *                         if angle == 0: # jump to the right, +X --> to the left, -X             # <<<<<<<<<<<<<<
@@ -18658,7 +18658,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               break;
               case 1:
 
-              /* "environment.pyx":91
+              /* "environment.pyx":107
  *                             newX = X - 1 if X > 0 else L - 1
  *                         elif angle == 1: # jump to the top, +Y --> to the bottom, -Y
  *                             newY = Y - 1 if Y > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18673,7 +18673,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               }
               __pyx_v_newY = __pyx_t_10;
 
-              /* "environment.pyx":90
+              /* "environment.pyx":106
  *                         if angle == 0: # jump to the right, +X --> to the left, -X
  *                             newX = X - 1 if X > 0 else L - 1
  *                         elif angle == 1: # jump to the top, +Y --> to the bottom, -Y             # <<<<<<<<<<<<<<
@@ -18683,7 +18683,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               break;
               case 2:
 
-              /* "environment.pyx":93
+              /* "environment.pyx":109
  *                             newY = Y - 1 if Y > 0 else L - 1
  *                         elif angle == 2: # jump to the left, -X --> to the right, +X
  *                             newX = X + 1 if X < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18698,7 +18698,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               }
               __pyx_v_newX = __pyx_t_10;
 
-              /* "environment.pyx":92
+              /* "environment.pyx":108
  *                         elif angle == 1: # jump to the top, +Y --> to the bottom, -Y
  *                             newY = Y - 1 if Y > 0 else L - 1
  *                         elif angle == 2: # jump to the left, -X --> to the right, +X             # <<<<<<<<<<<<<<
@@ -18708,7 +18708,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               break;
               default:
 
-              /* "environment.pyx":95
+              /* "environment.pyx":111
  *                             newX = X + 1 if X < L - 1 else 0
  *                         else: # jump to the bottom, -Y --> to the top, +Y
  *                             newY = Y + 1 if Y < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18725,7 +18725,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               break;
             }
 
-            /* "environment.pyx":87
+            /* "environment.pyx":103
  *                         newY = Y - 1 if Y > 0 else L - 1
  *                 else:
  *                     if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate: # jump against the director             # <<<<<<<<<<<<<<
@@ -18735,7 +18735,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             goto __pyx_L10;
           }
 
-          /* "environment.pyx":97
+          /* "environment.pyx":113
  *                             newY = Y + 1 if Y < L - 1 else 0
  *                     else:
  *                         if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate + translate_transverse: # jump to +pi/2 from the director             # <<<<<<<<<<<<<<
@@ -18746,7 +18746,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
             __pyx_t_9 = (__pyx_v_dice < (((__pyx_v_translate_along_rate + (2.0 * __pyx_v_rotation_rate)) + __pyx_v_translate_opposite_rate) + __pyx_v_translate_transverse));
             if (__pyx_t_9) {
 
-              /* "environment.pyx":98
+              /* "environment.pyx":114
  *                     else:
  *                         if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate + translate_transverse: # jump to +pi/2 from the director
  *                             if angle == 0: # jump to the right, +X --> to the top, +Y             # <<<<<<<<<<<<<<
@@ -18756,7 +18756,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               switch (__pyx_v_angle) {
                 case 0:
 
-                /* "environment.pyx":99
+                /* "environment.pyx":115
  *                         if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate + translate_transverse: # jump to +pi/2 from the director
  *                             if angle == 0: # jump to the right, +X --> to the top, +Y
  *                                 newY = Y + 1 if Y < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18771,7 +18771,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 }
                 __pyx_v_newY = __pyx_t_10;
 
-                /* "environment.pyx":98
+                /* "environment.pyx":114
  *                     else:
  *                         if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate + translate_transverse: # jump to +pi/2 from the director
  *                             if angle == 0: # jump to the right, +X --> to the top, +Y             # <<<<<<<<<<<<<<
@@ -18781,7 +18781,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 break;
                 case 1:
 
-                /* "environment.pyx":101
+                /* "environment.pyx":117
  *                                 newY = Y + 1 if Y < L - 1 else 0
  *                             elif angle == 1: # jump to the top, +Y --> to the left, -X
  *                                 newX = X - 1 if X > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18796,7 +18796,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 }
                 __pyx_v_newX = __pyx_t_10;
 
-                /* "environment.pyx":100
+                /* "environment.pyx":116
  *                             if angle == 0: # jump to the right, +X --> to the top, +Y
  *                                 newY = Y + 1 if Y < L - 1 else 0
  *                             elif angle == 1: # jump to the top, +Y --> to the left, -X             # <<<<<<<<<<<<<<
@@ -18806,7 +18806,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 break;
                 case 2:
 
-                /* "environment.pyx":103
+                /* "environment.pyx":119
  *                                 newX = X - 1 if X > 0 else L - 1
  *                             elif angle == 2: # jump to the left, -X --> to the bottom, -Y
  *                                 newY = Y - 1 if Y > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18821,7 +18821,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 }
                 __pyx_v_newY = __pyx_t_10;
 
-                /* "environment.pyx":102
+                /* "environment.pyx":118
  *                             elif angle == 1: # jump to the top, +Y --> to the left, -X
  *                                 newX = X - 1 if X > 0 else L - 1
  *                             elif angle == 2: # jump to the left, -X --> to the bottom, -Y             # <<<<<<<<<<<<<<
@@ -18831,7 +18831,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 break;
                 default:
 
-                /* "environment.pyx":105
+                /* "environment.pyx":121
  *                                 newY = Y - 1 if Y > 0 else L - 1
  *                             else: # jump to the bottom, -Y --> to the right, +X
  *                                 newX = X + 1 if X < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18848,7 +18848,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 break;
               }
 
-              /* "environment.pyx":97
+              /* "environment.pyx":113
  *                             newY = Y + 1 if Y < L - 1 else 0
  *                     else:
  *                         if dice < translate_along_rate + 2*rotation_rate + translate_opposite_rate + translate_transverse: # jump to +pi/2 from the director             # <<<<<<<<<<<<<<
@@ -18858,7 +18858,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               goto __pyx_L11;
             }
 
-            /* "environment.pyx":107
+            /* "environment.pyx":123
  *                                 newX = X + 1 if X < L - 1 else 0
  *                         else:  # jump to -pi/2 from the director
  *                             if angle == 0: # jump to the right, +X --> to the bottom, -Y             # <<<<<<<<<<<<<<
@@ -18867,7 +18867,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
  */
             /*else*/ {
 
-              /* "environment.pyx":111
+              /* "environment.pyx":127
  *                             elif angle == 1: # jump to the top, +Y --> to the right, +X
  *                                 newX = X + 1 if X < L - 1 else 0
  *                             elif angle == 2: # jump to the left, -X --> to the top, +Y             # <<<<<<<<<<<<<<
@@ -18877,7 +18877,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
               switch (__pyx_v_angle) {
                 case 0:
 
-                /* "environment.pyx":108
+                /* "environment.pyx":124
  *                         else:  # jump to -pi/2 from the director
  *                             if angle == 0: # jump to the right, +X --> to the bottom, -Y
  *                                 newY = Y - 1 if Y > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18892,7 +18892,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 }
                 __pyx_v_newY = __pyx_t_10;
 
-                /* "environment.pyx":107
+                /* "environment.pyx":123
  *                                 newX = X + 1 if X < L - 1 else 0
  *                         else:  # jump to -pi/2 from the director
  *                             if angle == 0: # jump to the right, +X --> to the bottom, -Y             # <<<<<<<<<<<<<<
@@ -18902,7 +18902,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 break;
                 case 1:
 
-                /* "environment.pyx":110
+                /* "environment.pyx":126
  *                                 newY = Y - 1 if Y > 0 else L - 1
  *                             elif angle == 1: # jump to the top, +Y --> to the right, +X
  *                                 newX = X + 1 if X < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18917,7 +18917,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 }
                 __pyx_v_newX = __pyx_t_10;
 
-                /* "environment.pyx":109
+                /* "environment.pyx":125
  *                             if angle == 0: # jump to the right, +X --> to the bottom, -Y
  *                                 newY = Y - 1 if Y > 0 else L - 1
  *                             elif angle == 1: # jump to the top, +Y --> to the right, +X             # <<<<<<<<<<<<<<
@@ -18927,7 +18927,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 break;
                 case 2:
 
-                /* "environment.pyx":112
+                /* "environment.pyx":128
  *                                 newX = X + 1 if X < L - 1 else 0
  *                             elif angle == 2: # jump to the left, -X --> to the top, +Y
  *                                 newY = Y + 1 if Y < L - 1 else 0             # <<<<<<<<<<<<<<
@@ -18942,7 +18942,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 }
                 __pyx_v_newY = __pyx_t_10;
 
-                /* "environment.pyx":111
+                /* "environment.pyx":127
  *                             elif angle == 1: # jump to the top, +Y --> to the right, +X
  *                                 newX = X + 1 if X < L - 1 else 0
  *                             elif angle == 2: # jump to the left, -X --> to the top, +Y             # <<<<<<<<<<<<<<
@@ -18952,7 +18952,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
                 break;
                 default:
 
-                /* "environment.pyx":114
+                /* "environment.pyx":130
  *                                 newY = Y + 1 if Y < L - 1 else 0
  *                             else: # jump to the bottom, -Y --> to the left, -X
  *                                 newX = X - 1 if X > 0 else L - 1             # <<<<<<<<<<<<<<
@@ -18975,7 +18975,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
         }
         __pyx_L9:;
 
-        /* "environment.pyx":117
+        /* "environment.pyx":133
  *                 #printf("exit translation\n")
  * 
  *                 if lattice[newX][newY] == 0:             # <<<<<<<<<<<<<<
@@ -18987,7 +18987,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
         __pyx_t_9 = ((*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_lattice.data + __pyx_t_7 * __pyx_v_lattice.strides[0]) ) + __pyx_t_8 * __pyx_v_lattice.strides[1]) ))) == 0);
         if (__pyx_t_9) {
 
-          /* "environment.pyx":118
+          /* "environment.pyx":134
  * 
  *                 if lattice[newX][newY] == 0:
  *                     lattice[X][Y] = 0 # particle leaves the original lattice site             # <<<<<<<<<<<<<<
@@ -18998,7 +18998,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           __pyx_t_7 = __pyx_v_Y;
           *((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_lattice.data + __pyx_t_8 * __pyx_v_lattice.strides[0]) ) + __pyx_t_7 * __pyx_v_lattice.strides[1]) )) = 0;
 
-          /* "environment.pyx":119
+          /* "environment.pyx":135
  *                 if lattice[newX][newY] == 0:
  *                     lattice[X][Y] = 0 # particle leaves the original lattice site
  *                     lattice[newX][newY] = 1 # diffusion             # <<<<<<<<<<<<<<
@@ -19009,7 +19009,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           __pyx_t_8 = __pyx_v_newY;
           *((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_lattice.data + __pyx_t_7 * __pyx_v_lattice.strides[0]) ) + __pyx_t_8 * __pyx_v_lattice.strides[1]) )) = 1;
 
-          /* "environment.pyx":120
+          /* "environment.pyx":136
  *                     lattice[X][Y] = 0 # particle leaves the original lattice site
  *                     lattice[newX][newY] = 1 # diffusion
  *                     particles[picked_particle][0] = newX             # <<<<<<<<<<<<<<
@@ -19020,7 +19020,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           __pyx_t_7 = 0;
           *((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_particles.data + __pyx_t_8 * __pyx_v_particles.strides[0]) ) + __pyx_t_7 * __pyx_v_particles.strides[1]) )) = __pyx_v_newX;
 
-          /* "environment.pyx":121
+          /* "environment.pyx":137
  *                     lattice[newX][newY] = 1 # diffusion
  *                     particles[picked_particle][0] = newX
  *                     particles[picked_particle][1] = newY             # <<<<<<<<<<<<<<
@@ -19031,7 +19031,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
           __pyx_t_8 = 1;
           *((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_particles.data + __pyx_t_7 * __pyx_v_particles.strides[0]) ) + __pyx_t_8 * __pyx_v_particles.strides[1]) )) = __pyx_v_newY;
 
-          /* "environment.pyx":117
+          /* "environment.pyx":133
  *                 #printf("exit translation\n")
  * 
  *                 if lattice[newX][newY] == 0:             # <<<<<<<<<<<<<<
@@ -19044,7 +19044,7 @@ static PyObject *__pyx_pf_11environment_2run(CYTHON_UNUSED PyObject *__pyx_self,
     }
   }
 
-  /* "environment.pyx":34
+  /* "environment.pyx":50
  * 
  * 
  * def run(int [:, :] lattice, int [:, :] particles, int simulation_time, int N, int L, double rotation_rate, double translate_along_rate, double translate_opposite_rate, double translate_transverse):             # <<<<<<<<<<<<<<
@@ -20172,7 +20172,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 }
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 35, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 141, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 156, __pyx_L1_error)
@@ -20329,29 +20329,29 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__18);
   __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "environment.pyx":30
+  /* "environment.pyx":46
  *     return sum
  * 
  * def count_blocked(int [:, :] lattice, int L):             # <<<<<<<<<<<<<<
  *     return count_blocked_c(lattice, L)
  * 
  */
-  __pyx_tuple__20 = PyTuple_Pack(2, __pyx_n_s_lattice, __pyx_n_s_L); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_tuple__20 = PyTuple_Pack(2, __pyx_n_s_lattice, __pyx_n_s_L); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_environment_pyx, __pyx_n_s_count_blocked, 30, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_environment_pyx, __pyx_n_s_count_blocked, 46, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 46, __pyx_L1_error)
 
-  /* "environment.pyx":34
+  /* "environment.pyx":50
  * 
  * 
  * def run(int [:, :] lattice, int [:, :] particles, int simulation_time, int N, int L, double rotation_rate, double translate_along_rate, double translate_opposite_rate, double translate_transverse):             # <<<<<<<<<<<<<<
  * 
  *     cdef:
  */
-  __pyx_tuple__22 = PyTuple_Pack(22, __pyx_n_s_lattice, __pyx_n_s_particles, __pyx_n_s_simulation_time, __pyx_n_s_N, __pyx_n_s_L, __pyx_n_s_rotation_rate, __pyx_n_s_translate_along_rate, __pyx_n_s_translate_opposite_rate, __pyx_n_s_translate_transverse, __pyx_n_s_gen, __pyx_n_s_dist, __pyx_n_s_picked_particle, __pyx_n_s_X, __pyx_n_s_Y, __pyx_n_s_angle, __pyx_n_s_new_angle, __pyx_n_s_newX, __pyx_n_s_newY, __pyx_n_s_dice, __pyx_n_s_counter_or_clock_rotation, __pyx_n_s_t, __pyx_n_s_n); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(22, __pyx_n_s_lattice, __pyx_n_s_particles, __pyx_n_s_simulation_time, __pyx_n_s_N, __pyx_n_s_L, __pyx_n_s_rotation_rate, __pyx_n_s_translate_along_rate, __pyx_n_s_translate_opposite_rate, __pyx_n_s_translate_transverse, __pyx_n_s_gen, __pyx_n_s_dist, __pyx_n_s_picked_particle, __pyx_n_s_X, __pyx_n_s_Y, __pyx_n_s_angle, __pyx_n_s_new_angle, __pyx_n_s_newX, __pyx_n_s_newY, __pyx_n_s_dice, __pyx_n_s_counter_or_clock_rotation, __pyx_n_s_t, __pyx_n_s_n); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 22, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_environment_pyx, __pyx_n_s_run, 34, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 22, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_environment_pyx, __pyx_n_s_run, 50, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -21402,28 +21402,28 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_Enum, __pyx_t_7) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "environment.pyx":30
+  /* "environment.pyx":46
  *     return sum
  * 
  * def count_blocked(int [:, :] lattice, int L):             # <<<<<<<<<<<<<<
  *     return count_blocked_c(lattice, L)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_11environment_1count_blocked, 0, __pyx_n_s_count_blocked, NULL, __pyx_n_s_environment, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_11environment_1count_blocked, 0, __pyx_n_s_count_blocked, NULL, __pyx_n_s_environment, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_count_blocked, __pyx_t_7) < 0) __PYX_ERR(0, 30, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_count_blocked, __pyx_t_7) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "environment.pyx":34
+  /* "environment.pyx":50
  * 
  * 
  * def run(int [:, :] lattice, int [:, :] particles, int simulation_time, int N, int L, double rotation_rate, double translate_along_rate, double translate_opposite_rate, double translate_transverse):             # <<<<<<<<<<<<<<
  * 
  *     cdef:
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_11environment_3run, 0, __pyx_n_s_run, NULL, __pyx_n_s_environment, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_11environment_3run, 0, __pyx_n_s_run, NULL, __pyx_n_s_environment, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_run, __pyx_t_7) < 0) __PYX_ERR(0, 34, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_run, __pyx_t_7) < 0) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "environment.pyx":1

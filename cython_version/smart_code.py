@@ -339,7 +339,7 @@ def plot_score(show_result=False):
 
 # Main
 if __name__ == '__main__':
-    Jesse_we_need_to_train_NN = True
+    Jesse_we_need_to_train_NN = False
     continue_training = False
     ############# Model parameters for Machine Learning #############
     num_episodes = 200      # number of training episodes

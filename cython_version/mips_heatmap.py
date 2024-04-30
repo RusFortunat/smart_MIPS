@@ -3,12 +3,15 @@ import numpy as np
 from scipy.interpolate import griddata
 
 ## Input
-filename = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_1.txt"
+mac_filename = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100.txt"
+mac_output = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/phase_plot.pdf"
 
-output = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/phase_plot.pdf"
+windows_filename = "./results_L100_L100.txt"
+windows_output = "./phase_plot.pdf"
 
 # Load data
-data = np.loadtxt(filename)
+#data = np.loadtxt(mac_filename)
+data = np.loadtxt(windows_filename)
 
 x_dat = data[:,0]
 y_dat = data[:,1]
@@ -24,8 +27,8 @@ for i in range(len(x_dat)):
         Z = np.append(Z, z_dat[i])
 
 # create x-y points to be used in heatmap
-xi = np.linspace(X.min(), X.max(), 1000)
-yi = np.linspace(Y.min(), Y.max(), 1000)
+xi = np.linspace(X.min(), X.max(), 500)
+yi = np.linspace(Y.min(), Y.max(), 500)
 
 # Interpolate for plotting
 zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='cubic')
@@ -40,7 +43,7 @@ zmax = np.abs(z_dat).max()
 zi[(zi<zmin) | (zi>zmax)] = None
 
 # Create the contour plot
-plt.axis([0.1, 0.5, 0.6, 1.0])
+plt.axis([0.05, 0.5, 0.6, 1.0])
 plt.xlabel(r"$\rho$", fontsize=24)
 plt.ylabel(r"$v_+$", fontsize=24)
 CS = plt.contourf(xi, yi, zi, 15, cmap=plt.cm.rainbow,
@@ -48,5 +51,6 @@ CS = plt.contourf(xi, yi, zi, 15, cmap=plt.cm.rainbow,
 plt.colorbar() 
 plt.tight_layout()
 
-plt.savefig(output, format = "pdf", dpi = 300)
+#plt.savefig(mac_output, format = "pdf", dpi = 300)
+plt.savefig(windows_output, format = "pdf", dpi = 300)
 plt.show()
