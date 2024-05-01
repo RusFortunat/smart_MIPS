@@ -151,7 +151,7 @@ def do_training(num_episodes, L, relaxation_time, update_time, update_attempts, 
         # initial conditions
         density = random.uniform(0.05, 0.5)
         print("Episode ", i_episode, "; density ", density)
-        target_fraction = random.uniform(0.1,0.8) # doesn't look like it's possible to go beyond 0.8
+        target_fraction = random.uniform(0.0,0.8) # doesn't look like it's possible to go beyond 0.8
         N = int(L*L*density)
         particles = np.zeros(shape=(N,3), dtype=np.int32)
         lattice = np.zeros(shape=(L, L), dtype=np.int32)
@@ -391,8 +391,8 @@ if __name__ == '__main__':
     phase_diagram = [] 
     for den in range(46):
         density = 0.05 + 0.01*den
-        for tar in range(71):
-            target_frac = 0.1 + 0.01*tar
+        for tar in range(81):
+            target_frac = 0.0 + 0.01*tar
             forward_rate, blocked_frac = evaluation(L, density, target_frac, relaxation_time, update_time, update_attempts, forw_rate_increment, T)
             entry = [density, forward_rate, target_frac, blocked_frac, target_frac - blocked_frac]
             phase_diagram.append(entry)
