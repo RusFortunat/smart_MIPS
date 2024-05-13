@@ -3,15 +3,18 @@ import numpy as np
 from scipy.interpolate import griddata
 
 ## Input
-mac_filename = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100.txt"
-mac_output = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/phase_plot.pdf"
+mac_filename1 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100.txt"
+mac_filename2 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct1.txt"
+mac_output = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/phase_plot_joined.pdf"
 
 windows_filename = "./results_L100_L100.txt"
 windows_output = "./phase_plot.pdf"
 
 # Load data
 #data = np.loadtxt(mac_filename)
-data = np.loadtxt(windows_filename)
+data1 = np.loadtxt(mac_filename1)
+data2 = np.loadtxt(mac_filename2)
+data = np.concatenate((data1, data2), axis=0)
 
 x_dat = data[:,0]
 y_dat = data[:,1]
