@@ -389,15 +389,15 @@ if __name__ == '__main__':
     
     T = 0.1
     phase_diagram = [] 
-    for den in range(46):
-        density = 0.05 + 0.01*den
-        for tar in range(81):
-            target_frac = 0.0 + 0.01*tar
+    for den in range(100):
+        density = 0.05 + 0.001*den
+        for tar in range(100):
+            target_frac = 0.0 + 0.005*tar
             forward_rate, blocked_frac = evaluation(L, density, target_frac, relaxation_time, update_time, update_attempts, forw_rate_increment, T)
             entry = [density, forward_rate, target_frac, blocked_frac, target_frac - blocked_frac]
             phase_diagram.append(entry)
 
-    filename = "results_L" + str(L) + "_L" + str(L) + ".txt"
+    filename = "results_low_densities_L" + str(L) + "_L" + str(L) + "_2.txt"
     with open(filename, 'w') as f:
         for n in range(len(phase_diagram)):
             output_string = str(phase_diagram[n][0]) + "\t" + str(phase_diagram[n][1]) + "\t" + str(phase_diagram[n][2]) + "\t" + str(phase_diagram[n][3]) + "\t" + str(phase_diagram[n][4]) + "\n"

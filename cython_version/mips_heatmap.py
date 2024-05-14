@@ -3,8 +3,10 @@ import numpy as np
 from scipy.interpolate import griddata
 
 ## Input
-mac_filename1 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100.txt"
-mac_filename2 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct1.txt"
+mac_filename1 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct1.txt"
+mac_filename2 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct2.txt"
+mac_filename3 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct3.txt"
+mac_filename_low_den = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_low_densities_L100_L100_1.txt"
 mac_output = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/phase_plot_joined.pdf"
 
 windows_filename = "./results_L100_L100.txt"
@@ -14,7 +16,9 @@ windows_output = "./phase_plot.pdf"
 #data = np.loadtxt(mac_filename)
 data1 = np.loadtxt(mac_filename1)
 data2 = np.loadtxt(mac_filename2)
-data = np.concatenate((data1, data2), axis=0)
+data3 = np.loadtxt(mac_filename3)
+data_low_den = np.loadtxt(mac_filename_low_den)
+data = np.concatenate((data1, data2, data3, data_low_den), axis=0)
 
 x_dat = data[:,0]
 y_dat = data[:,1]
@@ -30,8 +34,8 @@ for i in range(len(x_dat)):
         Z = np.append(Z, z_dat[i])
 
 # create x-y points to be used in heatmap
-xi = np.linspace(X.min(), X.max(), 500)
-yi = np.linspace(Y.min(), Y.max(), 500)
+xi = np.linspace(X.min(), X.max(), 400)
+yi = np.linspace(Y.min(), Y.max(), 400)
 
 # Interpolate for plotting
 zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='cubic')
