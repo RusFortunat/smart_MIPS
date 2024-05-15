@@ -6,7 +6,8 @@ from scipy.interpolate import griddata
 mac_filename1 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct1.txt"
 mac_filename2 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct2.txt"
 mac_filename3 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_L100_L100_correct3.txt"
-mac_filename_low_den = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_low_densities_L100_L100_1.txt"
+mac_filename_low_den_1 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_low_densities_L100_L100_1.txt"
+mac_filename_low_den_2 = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/results_low_densities_L100_L100_2.txt"
 mac_output = "/Users/Ruslan.Mukhamadiarov/Work/smart_MIPS/cython_version/phase_plot_joined.pdf"
 
 windows_filename = "./results_L100_L100.txt"
@@ -17,8 +18,9 @@ windows_output = "./phase_plot.pdf"
 data1 = np.loadtxt(mac_filename1)
 data2 = np.loadtxt(mac_filename2)
 data3 = np.loadtxt(mac_filename3)
-data_low_den = np.loadtxt(mac_filename_low_den)
-data = np.concatenate((data1, data2, data3, data_low_den), axis=0)
+data_low_den_1 = np.loadtxt(mac_filename_low_den_1)
+data_low_den_2 = np.loadtxt(mac_filename_low_den_2)
+data = np.concatenate((data1, data2, data3, data_low_den_1, data_low_den_2), axis=0)
 
 x_dat = data[:,0]
 y_dat = data[:,1]
@@ -38,7 +40,7 @@ xi = np.linspace(X.min(), X.max(), 400)
 yi = np.linspace(Y.min(), Y.max(), 400)
 
 # Interpolate for plotting
-zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='cubic')
+zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='linear')
 
 # I control the range of my colorbar by removing data 
 # outside of my range of interest
@@ -55,7 +57,16 @@ plt.xlabel(r"$\rho$", fontsize=24)
 plt.ylabel(r"$v_+$", fontsize=24)
 CS = plt.contourf(xi, yi, zi, 15, cmap=plt.cm.rainbow,
                   vmax=zmax, vmin=zmin)
-plt.colorbar() 
+
+from matplotlib import ticker
+
+# (generate plot here)
+cb = plt.colorbar()
+tick_locator = ticker.MaxNLocator(nbins=15)
+cb.locator = tick_locator
+cb.update_ticks()
+#plt.colorbar() 
+
 plt.tight_layout()
 
 #plt.savefig(mac_output, format = "pdf", dpi = 300)
